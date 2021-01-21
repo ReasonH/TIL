@@ -86,12 +86,18 @@ $ docker run -it centos:latest bash
 
 ---
 
-이전에 정리했던 문서(private)
+명령어 익히기
 
-[컨테이너 개발 실전 입문 정리](https://www.notion.so/67c6068c0d264ed58dcb36cd67526741)
+[02. 도커 컨테이너 배포](practice/cmd-practice2.md)
 
-### 향후...
+[03. 컨테이너 실전 구축 및 배포](practice/cmd-practice3.md)
 
+### 향후 공부해야할 것들...
 - 컨테이너 데이터 보존을 위한 데이터 볼륨 설정
 - 다수의 인스턴스 생성과 트래픽 분산
 - 컨테이너 오케스트레이션
+---
+
+참조
+[블로그: 44bits](https://www.44bits.io/ko/post/easy-deploy-with-docker)
+책: 도커/쿠버네티스를 활용한 컨테이너
