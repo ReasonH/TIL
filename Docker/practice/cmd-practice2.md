@@ -279,31 +279,31 @@ $docker container run -t -d --name gihyo-echo example/echo:latest
 
 아이디만 추출
 
-`$docker container ls -q`
+-> `$docker container ls -q`
 
 컨테이너 목록 필터링
 
 - 컨테이너 이름 기준
 
-    `$docker container ls --filter "name=echo1"`
+   -> `$docker container ls --filter "name=echo1"`
 
 - 컨테이너 생성 이미지 기준
 
-    `$docker container ls --filter "ancestor=example/echo1"`
+   -> `$docker container ls --filter "ancestor=example/echo1"`
 
 이미 종료된 컨테이너 포함 목록
 
-`$docker container ls -a` 
+-> `$docker container ls -a` 
 
-### docker container stop - 컨테이너 정지
+#### docker container stop - 컨테이너 정지
 
 `$docker container stop 컨테이너ID또는 컨테이너명`
 
-### docker container restart - 컨테이너 재시작
+#### docker container restart - 컨테이너 재시작
 
 `$docker container restart 컨테이너ID또는 컨테이너명`
 
-### docker container rm - 컨테이너 파기
+#### docker container rm - 컨테이너 파기
 
 `$docker container rm 컨테이너ID또는 컨테이너명`
 
@@ -311,7 +311,7 @@ $docker container run -t -d --name gihyo-echo example/echo:latest
 
 컨테이너 유지가 필요없는 경우 run 시점에 —rm 옵션
 
-### docker container logs - 표준 출력 연결
+#### docker container logs - 표준 출력 연결
 
 `$docker container logs [options] 컨테이너ID또는 컨테이너명`
 
@@ -356,19 +356,19 @@ dummy.txt
 
 실행 중이 아닌 모든 컨테이너 삭제 명령
 
-`$docker container prune`
+-> `$docker container prune`
 
 태그가 붙지 않은 모든 이미지 삭제
 
-`$docker image prune`
+-> `$docker image prune`
 
 사용하지 않는 모든 도커 리소스 일괄 삭제
 
-`$docker system prune`
+-> `$docker system prune`
 
 ### docker container stats - 사용 현황 확인
 
-`$ docker container stats [options] [대상컨테이너ID]`
+-> `$ docker container stats [options] [대상컨테이너ID]`
 
 ## 5. 도커 컴포즈로 여러 컨테이너 실행
 
@@ -376,9 +376,9 @@ dummy.txt
 
 ### docker-compose 명령으로 컨테이너 실행
 
-`$ docker-compose up` 컨테이너 실행
+`$ docker-compose up` -> 컨테이너 실행
 
-`$ docker-compose down` yml의 모든 컨테이너 정지 or 삭제
+`$ docker-compose down` -> yml의 모든 컨테이너 정지 or 삭제
 
 ```yaml
 version: "3" # grammer version
@@ -406,7 +406,7 @@ services:
 
 마스터 컨테이너 접속 후 SSH 생성
 
-`docker container exec -it master ssh-keygen -t rsa -C ""`
+-> `docker container exec -it master ssh-keygen -t rsa -C ""`
 
 ### 슬레이브 젠킨스 컨테이너 생성
 
