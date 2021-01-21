@@ -98,6 +98,6 @@ $ docker run -it centos:latest bash
 - 컨테이너 오케스트레이션
 ---
 
-참조
-[블로그: 44bits](https://www.44bits.io/ko/post/easy-deploy-with-docker)
+참조  
+[블로그: 44bits](https://www.44bits.io/ko/post/easy-deploy-with-docker)  
 책: 도커/쿠버네티스를 활용한 컨테이너
