@@ -140,8 +140,8 @@ Pod, Service 등은 네임스페이스 별로 **생성**이나 **관리, 사용�
 ```yaml
 metadata:
   label: 
-		key1: value1
-		key2: value2
+    key1: value1
+    key2: value2
 ```
 
 셀렉터를 사용하는 방법은 오브젝트 스펙에서 selector라 정의하고 라벨 조건을 적으면 된다. 셀렉터 종류는 두 가지로 다음과 같다.
