@@ -6,4 +6,4 @@
 
 2. [Docker](Docker/Docker-Concept.md)
 
-3. [Kubernetes](Kubernetes/README.md)
+3. [Kubernetes](Kubernetes/Intro.md)
