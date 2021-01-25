@@ -32,6 +32,8 @@
 
 [6.4 디플로이먼트](practice/6-4.md)
 
+[6.5 서비스](practice/6-5.md)
+
 ---
 참조 
 블로그: [조대협의 블로그](https://bcho.tistory.com/1255?category=731548)  
