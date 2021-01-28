@@ -38,9 +38,15 @@
 
 [6.5 서비스](practice/6-5.md)
 
-[Prometheus - Helm으로 자동배포](practice/prometheus-1.md)
+[Spring Boot 배포](practice/spring-boot-deploy.md)
 
-[Prometheus - Grafana](practice/prometheus-2.md)
+[Prometheus - Helm Chart로 배포](practice/prometheus-1.md)
+
+[Prometheus - Grafana 연동](practice/prometheus-2.md)
+
+[7.1 네임스페이스](practice/7-1.md)
+
+[7.2.1 컨피그맵](practice/7-2-1.md)
 
 ---
 참조 
