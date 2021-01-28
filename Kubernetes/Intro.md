@@ -24,6 +24,10 @@
 
 [5. 디스크 (볼륨)](concept/05-volume.md)
 
+[모니터링](concept/monitoring.md)
+
+[모니터링 - 프로메테우스](concept/monitoring-prometheus.md)
+
 ### 실습
 
 [6.2 포드(Pod)](practice/6-2.md)
@@ -33,6 +37,10 @@
 [6.4 디플로이먼트](practice/6-4.md)
 
 [6.5 서비스](practice/6-5.md)
+
+[Prometheus - Helm으로 자동배포](practice/prometheus-1.md)
+
+[Prometheus - Grafana](practice/prometheus-2.md)
 
 ---
 참조 
