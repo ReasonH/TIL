@@ -25,7 +25,7 @@ public class DemoController {
     @Autowired
     private MeterRegistry meterRegistry;
 		
-		// Counter 메트릭 추가, api_call_count_total 가 메트릭 이름이 됨
+    // Counter 메트릭 추가, api_call_count_total 가 메트릭 이름이 됨
     private Counter counter;
 		
     @PostConstruct
@@ -38,14 +38,14 @@ public class DemoController {
         return "Hello, It's demo";
     }
 
-		// Time 메트릭 추가		
+    // Time 메트릭 추가		
     @Timed(value = "api.call.time")
     @GetMapping("/time")
     public String timeTest() {
         return "time-test";
     }
 		
-		// counter를 증가시킨다.
+    // counter를 증가시킨다.
     @GetMapping("/test")
     public String test() {
         counter.increment();
