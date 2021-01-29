@@ -28,7 +28,7 @@ public class DemoController {
 		// Counter 메트릭 추가, api_call_count_total 가 메트릭 이름이 됨
     private Counter counter;
 		
-		@PostConstruct
+    @PostConstruct
     public void init() {
         counter= meterRegistry.counter("api.call.count");
     }
