@@ -48,6 +48,8 @@
 
 [7.2.1 컨피그맵](practice/7-2-1.md)
 
+[7.2.2 시크릿](practice/7-2-2.md)
+
 ---
 참조 
 블로그: [조대협의 블로그](https://bcho.tistory.com/1255?category=731548)  
