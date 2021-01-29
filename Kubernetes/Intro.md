@@ -50,6 +50,8 @@
 
 [7.2.2 시크릿](practice/7-2-2.md)
 
+[Spring Boot, Prometheus, Grafana on K8s](practice/spring-boot-prometheus-deploy.md)
+
 ---
 참조 
 블로그: [조대협의 블로그](https://bcho.tistory.com/1255?category=731548)  
