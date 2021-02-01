@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: hostpath
+spec:
+  containers:
+  - name: redis
+    image: redis
+    volumeMounts:
+    - name: terrypath
+      mountPath: /data/shared
+  volumes:
+  - name : terrypath
+    hostPath:
+      path: /host_mnt/c/Users/reason96/Desktop/volume
+      type: Directory
