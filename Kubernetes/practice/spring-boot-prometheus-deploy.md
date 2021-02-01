@@ -240,3 +240,28 @@ $ kubectl run -i --tty --rm debug --image=alicek106/ubuntu:curl
 그래프에 매우 잘 반영되고 있다. 다음으로는 더 다양한 상태를 효과적으로 시각화하기 위해 Grafana를 연동한다.
 
 ### Deploy Grafana using Helm Chart
+
+먼저 helm을 이용해 grafana를 배포한다.
+
+```bash
+# 설치
+$ helm install grafana grafana/grafana --namespace monitoring
+
+# NodePort 타입 서비스로 변경
+$ kubectl edit svc grafana -n monitoring
+
+# 로그인 암호 정보 획득
+$ kubectl get secret -n monitoring grafana -o jsonpath="{.data.admin-password}"
+```
+
+이후 Grafana 웹 콘솔에 접속해 Datasource를 설정한다.
+
+URL에는 프로메테우스 서버의 내부 IP와 Port를 작성한다.
+
+![](img/spring-boot-prometheus-deploy-5.png)
+
+이제 간단한 그래프 판넬을 통해 데이터를 잘 받아오고 있는지 확인한다.
+
+![](img/spring-boot-prometheus-deploy-6.png)
+
+Metrics에 들어간 쿼리는 api_call_time_seconds_sum에 대해 정상 응답인 것만 선택해 5분 동안의 수치를 조회하는 쿼리이다.
