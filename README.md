@@ -8,6 +8,8 @@
 
 3. [Kubernetes](Kubernetes/index.md)
 
-4. [Common](Common/index.md)
+4. [Kafka](Kafka/index.md)
 
-5. [Tool](Tool/index.md)
+5. [Common](Common/index.md)
+
+6. [Tool](Tool/index.md)
