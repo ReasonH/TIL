@@ -14,6 +14,8 @@ Refactoring 책 읽고 정리
 
 [6. 기본적인 리팩터링](./06-basic-refactoring.md)
 
+[7. 캡슐화](./07-encapsulation.md)
+
 ---
 
 참조
