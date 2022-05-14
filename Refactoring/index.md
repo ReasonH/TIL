@@ -16,6 +16,8 @@ Refactoring 책 읽고 정리
 
 [7. 캡슐화](./07-encapsulation.md)
 
+[8. 기능 이동](./08-function-migration.md)
+
 ---
 
 참조
