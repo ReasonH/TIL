@@ -4,12 +4,12 @@
 
 다음은 javadoc에서 설명되어 있는 Retention의 Enum에 대한 설명이다.
 
-> **Enum Constant and Description**
-> `CLASS`
-> Annotations are to be recorded in the class file by the compiler but need not be retained by the VM at run time.
-> `RUNTIME`
-> Annotations are to be recorded in the class file by the compiler and retained by the VM at run time, so they may be read reflectively.
-> `SOURCE`
+> **Enum Constant and Description**.  
+> `CLASS`  
+> Annotations are to be recorded in the class file by the compiler but need not be retained by the VM at run time.  
+> `RUNTIME`  
+> Annotations are to be recorded in the class file by the compiler and retained by the VM at run time, so they may be read reflectively.  
+> `SOURCE`  
 > Annotations are to be discarded by the compiler.
 
 간단히 한국어로 풀어서 쓰면 다음과 같다.
