@@ -18,6 +18,10 @@ Refactoring 책 읽고 정리
 
 [8. 기능 이동](./08-function-migration.md)
 
+[9. 데이터 조직화](./09-data-organization.md)
+
+[10. 조건부 로직 간소화](./10-conditional-logic.md)
+
 ---
 
 참조
