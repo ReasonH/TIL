@@ -10,7 +10,9 @@
 
 4. [Kafka](Kafka/index.md)
 
-5. [Common](Common/index.md)
+5. [Refactoring](Refactoring/index.md)
+
+6. [Common](Common/index.md)
 
 6. [Tool](Tool/index.md)
 
