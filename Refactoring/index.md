@@ -22,6 +22,8 @@ Refactoring 책 읽고 정리
 
 [10. 조건부 로직 간소화](./10-conditional-logic.md)
 
-## [11. API 리팩터링](./11-api-refactoring.md)
+[11. API 리팩터링](./11-api-refactoring.md)
+
+[12. 상속 다루기](./12-inheritance-handling.md)
 
 참조
