@@ -13,3 +13,5 @@ HTTP 완벽 가이드 책 읽고 정리, 개인적으로 필요하다고 생각�
 [Chapter6. 프록시](./06-proxy.md)
 
 [Chapter7. 캐시](./07-cache.md)
+
+[Chapter8. 통합점: 게이트웨이, 터널, 릴레이](./08-integration-point.md)
