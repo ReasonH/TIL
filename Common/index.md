@@ -4,6 +4,6 @@
 
 2. [gRPC](gRPC.md)
 
-3. [Java Annotation Retention](retention.md)
+3. [Message Queue vs Pub/Sub](MQ-pub-sub.md)
 
-4. [안정적인 스레드 풀의 수는 얼마일까?](thread-pool.md)
+4. [Kafka](Kafka/index.md)
