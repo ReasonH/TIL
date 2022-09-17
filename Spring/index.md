@@ -11,3 +11,5 @@
 5. [JDK와 CGLIB](jdk-cglib.md)
 
 6. [각종 Spring Annotation](annotaton.md)
+
+7. [JPA](JPA/jpa.md)

@@ -1,17 +1,19 @@
 ### Websocket
 
-클라이언트-서버 간의 전통적 통신기법은 클라이언트 Request - 서버Response였다. 그러나 서버가 클라이언트에게 특정 동작을 알릴 필요가 생기기 시작했고, 이를 해결하는 방법으로 Polling 등이 등장했다. 이는 대안이 될 수 있었지만, request-response의 지속적 수행 및 중복 패킷 전달 등 근본적인 문제를 지니고 있었다. 
+클라이언트-서버 간의 전통적 통신기법은 클라이언트 Request - 서버Response였다. 그러나 서버가 클라이언트에게 특정 동작을 알릴 필요가 생기기 시작했고, 이를 해결하는 방법으로 Polling 등이 등장했다. 이는 대안이 될 수 있었지만, request-response의 지속적 수행 및 중복 패킷 전달 등 근본적인 문제를 지니고 있었다.
 
 웹 소켓은 이런 문제들을 해결하기 위해 등장한 HTTP환경의 전이중 통신 지원 프로토콜이다. HTTP를 이용해 Handshake를 완료한 후, HTTP를 이용해 동작하지만, HTTP와는 다른 방식으로 동작한다.
 
 - 장점 : 반복적 Handshake의 필요가 없으며, 덕분에 지연이 낮다.
-    - 높은 빈도, 대량의 정보 통신에 유리하다.
-    - Binary, Text 데이터 송수신 가능
-- 단점 : Connection이 유지되는 동안 항상 통신을 하는 것은 아니다(Connection 낭비)
+  - 높은 빈도, 대량의 정보 통신에 유리하다.
+  - Binary, Text 데이터 송수신 가능
+- 단점 : Connection이 유지되는 동안 항상 통신을 하는 것은 아니다(Connection 낭비 유발 가능)
 
 ### STOMP
 
-위에서 살펴봤듯이 웹소켓은 Binary, Text 데이터라면 모두 송수신 가능하다. 이런 통신을 더 구체적으로 제어하기 위해 handshake 과정에서 sub-protocol을 지정해 사용할 수 있다. STOMP는 sub-protocol의 일종으로 사용하게 되면 규격을 갖춘(format) message를 보낼 수 있다.
+위에서 살펴봤듯이 웹소켓은 Binary, Text 데이터라면 모두 송수신 가능하다. 이런 통신을 더 구체적으로 제어하기 위해 handshake 과정에서 sub-protocol을 지정해 사용할 수 있다.
+
+STOMP는 이 sub-protocol의 일종으로 사용하게 되면 규격을 갖춘(format) message를 보낼 수 있다.
 
 - 텍스트 기반 메세징 프로토콜
 - 포맷은 아래와 같이 명령, 헤더, 바디(본문)로 이루어진다.
@@ -64,7 +66,7 @@ content-length:141
 {"tid":"cadb8bc2a5a24a7ee55da7f5f5c439b1","type":"RESPONSE","method":"/chat/sendMessage","jsonData":{~~~}}
 ```
 
-메세지를 서버로 전송했을 때, 서버가 클라이언트로 보내는 RESPONSE와 구독자에게 보내는 MESSAGE까지 2개의 응답이 MESSAGE형식으로 확인된다. **(클라이언트가 곧 구독자일 수 있음)**
+메세지를 서버로 전송했을 때, 서버가 클라이언트로 보내는 RESPONSE와 구독자에게 보내는 MESSAGE까지 2개의 응답이 MESSAGE형식으로 확인된다. **(클라이언트가 구독자인 경우)**
 
 ![](./img/stomp-01.png)
 
@@ -105,10 +107,10 @@ public void configureMessageBroker(MessageBrokerRegistry config) {
 **STOMP 설정 과정 정리**
 
 1. Receive Client
-    - 메세지를 받기 위해 특정 토픽이 사전에 서버에 subscribe 되어야함
+   - 메세지를 받기 위해 특정 토픽이 사전에 서버에 subscribe 되어야함
 2. Send Client
-    - 서버와 연결된 클라이언트는 특정 path로 메세지를 전달한다.
+   - 서버와 연결된 클라이언트는 특정 path로 메세지를 전달한다.
 3. Broker
-    - 메세지 브로커는 kafka, rabbitmq, activemq 등의 오픈소스들 처럼 MQ이며, pub/seb 모델을 따른다. 토픽에 따라 사용자를 구분한다.
-    - 연결된 클라이언트 세션 관리
-    - 특정 토픽 - 메세지 매핑 통해, 토픽을 구독하는 세션에 존재하는 클라이언트에 메세지 전달
+   - 메세지 브로커는 kafka, rabbitmq, activemq 등의 오픈소스들 처럼 MQ이며, pub/seb 모델을 따른다. 토픽에 따라 사용자를 구분한다.
+   - 연결된 클라이언트 세션 관리
+   - 특정 토픽 - 메세지 매핑 통해, 토픽을 구독하는 세션에 존재하는 클라이언트에 메세지 전달
