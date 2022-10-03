@@ -1,0 +1,142 @@
+{
+  "main": {
+    "id": "7dfcf14ec5086f84",
+    "type": "split",
+    "children": [
+      {
+        "id": "71a433ede40c2a6c",
+        "type": "leaf",
+        "state": {
+          "type": "markdown",
+          "state": {
+            "file": "Common/index.md",
+            "mode": "source",
+            "source": false
+          }
+        }
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "49ba348b98588ec4",
+    "type": "split",
+    "children": [
+      {
+        "id": "8da861a488a2c18f",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "cd8508dde1f06e30",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {}
+            }
+          },
+          {
+            "id": "27261ec76be7ba6a",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "4ec3bcb7268436f4",
+            "type": "leaf",
+            "state": {
+              "type": "starred",
+              "state": {}
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "23df39057ca634d7",
+    "type": "split",
+    "children": [
+      {
+        "id": "23a32ab015cfc282",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "af636a3e2eb3c3f0",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "Common/index.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "637e365554ed94fb",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "Common/index.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "2246dfeda5b28d29",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true
+              }
+            }
+          },
+          {
+            "id": "776401f20ce558c6",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "Common/index.md"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "active": "71a433ede40c2a6c",
+  "lastOpenFiles": [
+    "Common/gRPC.md",
+    "Spring/JPA/jpa-08.md",
+    "Spring/JPA/jpa.md",
+    "Spring/index.md",
+    "README.md",
+    "Spring/annotaton.md",
+    "Common/img/mq2.webp",
+    "Common/img/mq1.webp"
+  ]
+}
