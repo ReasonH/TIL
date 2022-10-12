@@ -7,3 +7,5 @@
 3. [Message Queue vs Pub/Sub](MQ-pub-sub.md)
 
 4. [Kafka](Kafka/index.md)
+
+5. [레디스 팁](redis-tip.md)
