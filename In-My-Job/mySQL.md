@@ -64,5 +64,7 @@ Online DDL 작업에서 사용할 수 있는 기능인데, Long Transaction 없�
 
 ALGORITHM을 따로 설정하지 않는 경우 자동으로 INSTANT -> INPLACE -> COPY 순으로 선택한다.
 
+---
+##### 참고
 - https://nomadlee.com/mysql-explain-sql/
 - https://jojoldu.tistory.com/520

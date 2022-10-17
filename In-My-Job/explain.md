@@ -58,6 +58,7 @@ EXPLAIN <쿼리>
 | index           | 인덱스를 처음부터 끝까지 검색, 인덱스 일부 열만 사용하는 경우 발생 가능 |
 | all             | 테이블 풀스캔                                                           |
 
-
-https://dev.mysql.com/doc/refman/8.0/en/correlated-subqueries.html
-https://dev.mysql.com/doc/refman/8.0/en/explain-output.html
+---
+##### 참고
+- https://dev.mysql.com/doc/refman/8.0/en/correlated-subqueries.html
+- https://dev.mysql.com/doc/refman/8.0/en/explain-output.html
