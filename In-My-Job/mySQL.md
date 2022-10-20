@@ -54,7 +54,7 @@ DB 메타정보를 읽어온다. 다양한 메타정보를 포함하기에 유�
 (다만 싱크가 일부 맞지 않아서 정확한 실시간 통계가 제공되지는 않는 것 같다)
 
 ### EXPLAIN 쿼리
-[[explain | 상세 설명 ]]
+[상세 설명](explain.md)
 
 ### INSTANT ADD
 MySQL 8.0버전 (InnoDB) 이상에서는 Instant ADD column을 지원한다.

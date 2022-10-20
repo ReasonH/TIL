@@ -108,6 +108,6 @@ W – the average time to handle the request (latency)
 
 이러한 공식은 만능이 아니며 모든 프로젝트에 적합하지는 않다. 공식은 시스템의 평균 요청 수에만 초점을 맞췄지만 실제로는 다양한 트래픽 버스트 패턴이 존재하기 때문이다. 그러나 이런 공식이 프로젝트의 시작점이 될 수는 있다. 계산된 값으로 시작한 뒤, 테스트 후 스레드 풀을 조절하자.
 
-출처: [https://engineering.zalando.com/posts/2019/04/how-to-set-an-ideal-thread-pool-size.html](https://engineering.zalando.com/posts/2019/04/how-to-set-an-ideal-thread-pool-size.html)\
+출처: [https://engineering.zalando.com/posts/2019/04/how-to-set-an-ideal-thread-pool-size.html](https://engineering.zalando.com/posts/2019/04/how-to-set-an-ideal-thread-pool-size.html)
 
 **의역 많음**

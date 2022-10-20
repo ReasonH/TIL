@@ -11,7 +11,7 @@ Cassandra 관련, 필요할 때마다 공부했던 부분들을 정리
 - 조회 쿼리에 비교적 제약이 존재 (ex. Partition Key 사용하지 않을 시 성능 이슈) 
 
 ### 구성
-![[img/Pasted image 20221012232912.png]]
+![](img/cassandra-1.png)
 Cassandra는 기본적으로 여러 노드로 구성된 Ring 구조를 갖고 있다. 각 노드는 설정을 통해 고유의 hash값 범위를 부여받는다. 여기에 데이터 Partition Key (Cassandra Data Layer의 Row Key)의 Hash값을 기준으로 데이터를 분산시킨다. 같은 Partition Key를 갖는 Row들은 같은 디스크에 저장된다.
 
 ### 데이터 저장 방식
@@ -19,7 +19,8 @@ Cassandra는 기본적으로 여러 노드로 구성된 Ring 구조를 갖고 �
 - 즉 Memtable 저장 시점부터 정렬되어있는 Append only 방식
 
 ## 2. CDL / CQL
-![[img/Pasted image 20221012233450.png]]
+
+![](cassandra-2.png)
  위는 Cassandra Data Layer를 나타낸다.
 1. Keyspace
 2. Table
@@ -27,7 +28,7 @@ Cassandra는 기본적으로 여러 노드로 구성된 Ring 구조를 갖고 �
 4. Column Name - Column Value
 
 형태로 마치 일반적인 RDBMS 구조와 유사해 보이지만, Column Name과 Value는 일반적인 RDBMS의 컬럼과 의미가 다르다. Cassandra에서의 Row는 특정 스키마에 종속되지 않으며 Column이 계속 늘어날 수 있다. 이는 Cassandra가 Key-Value NoSQL 저장소인 이유이기도 하다.
-![[img/Pasted image 20221012233503.png]]
+![](cassandra-3.png)
 그림은 CQL 테이블로 CDL을 매핑한 결과이다.
 
 CQL은 Cassandra Query Language의 약어로 CDL을 추상화한다. 이 그림에서의 Column은 CDL과 달리 RDB Table의 Attribute와 매치된다. 애플리케이션 레벨에서 개발하는 경우 대부분 CQL을 이용하는데, 둘은 분명한 차이가 있기 때문에 이애 대해 인지할 필요가 있다.
@@ -128,7 +129,7 @@ Cassandra에서의 삭제는 INSERT 또는 UPSERT로 취급된다. DELETE 명령
 **Tombstone이 없이 삭제하는 경우**
 
 일부 노드에서 삭제가 실패한 경우에도 QUORUM을 통해 삭제는 성공한 것으로 간주된다. 삭제가 실패한 노드에 읽기 요청이 오는 경우 이미 사라진 데이터 (aka 좀비)가 반환될 수 있다.
-![[img/Pasted image 20221012233426.png]]
+![](cassandra-4.png)
 
 **Tombstone을 이용해 삭제하는 경우**
 

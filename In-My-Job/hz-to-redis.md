@@ -17,7 +17,7 @@ hazelcast여야만 하는 이유가 없었다. 초기에 hazelcast를 선택했�
 Reids를 선택한 이유는 다음과 같다.
 
 #### 1. 성숙도
-![[img/Pasted image 20221008130804.png]]
+![](hz-to-redis-1.png)
 압도적인 커뮤니티의 활성도와 그에 따른 다양한 경험들이 이미 축적되어 있었다. 시스템 어드민 용도로 사용할 수 있는 다양한 웹 콘솔, Java Client, 벤치마크 자료와 트러블 슈팅 자료까지 이미 캐시 시스템의 트렌드가 되면서 구축된 탄탄한 생태계가 있다.
 
 #### 2. 영속화(백업) 지원
@@ -90,8 +90,8 @@ Redis 전용 서버였기 때문에 소켓을 50,000 정도로 크게 잡아도 
 
 설명은 의외로 Spin lock에 되어 있었다. (이런 문제를 예방하려면 Spin lock을 써라)
 *결국 은탄은 없다는 것이다...*
-![[img/Pasted image 20221008134535.png]]
-![[img/Pasted image 20221008140033.png]]
+![](hz-to-redis-2.png)
+![](hz-to-redis-3.png)
 pub/sub 형식이 좋구나 싶어서 바로 도입하고, 정작 그로인해 발생할 수 있는 문제는 제대로 알아보지 않은게 패착이었다. 이를 해결하기 위한 대안은 다음과 같았다.
 
 1. Subscription Channel size를 늘린다.
@@ -144,4 +144,4 @@ public void send() {
 	- 그런데, 이를 위해 별도의 lock을 걸다니...
 
 ---
-부록으로  [[redis-tip]]
+부록으로  [redis-tip](/Common/redis-tip)
