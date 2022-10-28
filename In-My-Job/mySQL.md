@@ -43,7 +43,6 @@ show processlist;
 현재 커넥션 리스트들과 각 커넥션에서 수행되는 process의 sql 및 상태를 보여준다.
 문제 상황에서는 해당 프로세스에 `kill`  을 이용해 프로세스를 죽인다. (주의 필요)
 
-
 INFORMATION_SCHEMA
 ```sql
 SELECT * FROM information_schema.`TABLES`

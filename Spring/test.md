@@ -81,5 +81,6 @@ public class WelcomeControllerTest {
 
 addFilter등을 사용해 서블릿 필터가 추가 가능하다
 
-> 참고1: https://itmore.tistory.com/entry/MockMvc-%EC%83%81%EC%84%B8%EC%84%A4%EB%AA%85
-> 참고2: https://www.baeldung.com/spring-webappconfiguration
+참고
+- https://itmore.tistory.com/entry/MockMvc-%EC%83%81%EC%84%B8%EC%84%A4%EB%AA%85
+- https://www.baeldung.com/spring-webappconfiguration
