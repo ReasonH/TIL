@@ -1,3 +1,5 @@
+> 현재는 functional binding 방식을 사용하고 있다. 문서 업데이트 예정...
+
 ### 0. 용어 설명
 
 - Spring Cloud Stream → 이하 SCS라고 한다

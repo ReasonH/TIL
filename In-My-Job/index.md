@@ -6,3 +6,4 @@
 
 [기타 등등 이슈 모음](etc.md)
 
+[Cassandra TTL](cassandra-ttl.md)

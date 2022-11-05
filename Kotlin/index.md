@@ -8,4 +8,4 @@ Kotlin 관련 내용 정리
 
 3. [키워드](keyword.md)
 
-4. [코틀린과 JPA, Hibernate](kotlin-jpa)
+4. [코틀린과 JPA Entity](kotlin-jpa)

@@ -24,4 +24,9 @@ ex) Transient 필드는 Spring에 의해 캐시되지만 Hibernate에 의해서�
 - `@CachePut` 캐시 업데이트
 - `@CacheConfig` 클래스 레벨에서 캐시 설정 공유
 
-스프링 캐시 추상화는 실제 저장소를 제공하주지 않고 구체화된 추상에 의존한다. 사용자가 `CacheManager`나 `CacheResolver` 타입의 빈을 정의하지 않는다면 스프링 부트는 캐시 제공자를 정해진 순서대로 탐지한다. ([https://docs.spring.io/spring-boot/docs/2.1.6.RELEASE/reference/html/boot-features-caching.html](https://docs.spring.io/spring-boot/docs/2.1.6.RELEASE/reference/html/boot-features-caching.html))
+스프링 캐시 추상화는 실제 저장소를 제공하주지 않고 구체화된 추상에 의존한다. 사용자가 `CacheManager`나 `CacheResolver` 타입의 빈을 정의하지 않는다면 스프링 부트는 캐시 제공자를 정해진 순서대로 탐지한다.
+
+---
+
+참고
+- https://docs.spring.io/spring-boot/docs/2.1.6.RELEASE/reference/html/boot-features-caching.html

@@ -119,4 +119,7 @@ public FeignLoggerFactory feignLoggerFactory() {
 
 실제 환경에서 Feign을 사용하기 위해서는 커스터마이징이 필수적이다. ex) full로그가 필요, Hystrix나 Retryer과 함께 제공되는 기능이 필요 등
 
-[https://sabarada.tistory.com/115?category=822738](https://sabarada.tistory.com/115?category=822738)
+---
+
+참고
+- https://sabarada.tistory.com/115?category=822738
