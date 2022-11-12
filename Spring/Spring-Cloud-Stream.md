@@ -1,18 +1,17 @@
-> 현재는 functional binding 방식을 사용하고 있다. 문서 업데이트 예정...
 
 ### 0. 용어 설명
 
-- Spring Cloud Stream → 이하 SCS라고 한다
-- 문서 내의 미들웨어는 사실상 RabbitMQ, Kafka 등 메세지큐라고 볼 수 있음
-- input == inbound, output == outbound
-- destination == rabbitMQ's exchange
+- Spring Cloud Stream → 이하 SCS라고 한다.
+- 문서 내의 미들웨어는 사실상 RabbitMQ, Kafka 등 메세지큐라고 볼 수 있다.
+- destination - 미들웨어 내 메시지의 목적지, rabbitMQ는 exchange라고 할 수 있다.
 
-### 1. SCS 소개
+## 1. SCS 소개
 
-- 외부 시스템 연결을 위한 애플리케이션을 신속히 구축할 수 있는 Micro service 프레임워크
-- 메시지 브로커에 대한 연결 제공
-  - RabbitMQ 등을 사용해 Spring Boot 어플리케이션과 메세지를 보내고 받는다.
+- 외부 메시징 시스템 연결을 위한 애플리케이션을 신속히 구축할 수 있는 Micro service 프레임워크
+- Spring Application과 Rabbit 등의 미들웨어 연동
 - Event driven micro service 구축을 위한 프레임워크
+
+## 2. 아키텍쳐
 
 ### 2.1 Application Model
 
@@ -20,9 +19,8 @@
 
 SCS애플리케이션은 미들웨어 중립적이다. 애플리케이션은 SCS에 의해 주입된 입출력 채널을 통해 외부와 통신한다. 채널은 미들웨어 별 바인더 구현을 통해 외부 브로커에 연결된다.
 
-input, inbound: 메세지 송신 처리용
-
-output, outbound: 메세지 수신 처리용
+- input, inbound: 메세지 송신 처리용
+- output, outbound: 메세지 수신 처리용
 
 ### 2.2 **Binder & Binding**
 
@@ -41,7 +39,7 @@ output, outbound: 메세지 수신 처리용
 
 SCS는 클래스 경로에서 바인더를 자동 감지하고 사용한다. 런타임에 특정 채널에 대해 다른 바인더를 사용하는 등 복잡한 사용 또한 가능하다.
 
-### 2.3 Persistent Pub/Sub support
+### 2.3 예시, Persistent Pub/Sub support
 
 ![](./img/scs-2.png)
 
@@ -51,96 +49,73 @@ pub/sub 모델은 producer/consumer 모두의 복잡도를 줄인다. 또한, �
 
 pub/sub이 새로운 개념은 아니지만, SCS는 자체 미들웨어 서포트를 통해 각기 다른 플랫폼에서 간단한 pub/sub모델을 사용할 수 있도록 한다.
 
-### 3. Programming Model
+## 3. Programming Model
 
 SCS의 프로그래밍 모델 소개
 
 ### 3.1 Declaring and Binding Channels
 
-**3.1.1 @EnableBinding**
+**3.1.1 Functional Binding**
 
-해당 어노테이션 적용으로 스프링 어플리케이션을 SCS 어플리케이션으로 바꿀 수 있다. 해당 어노테이션 자체는 @Configuration으로 메타 어노테이션이 달려 있으며, Spring CloudStream 인프라의 구성을 트리거한다.
+SCS 3.0 이상부터는 기존의 @EnableBinding이 Deprecated 되었으며 함수형 인터페이스를 활용한 Functional Binding을 지원한다.
+```java
+@Configuration
+public class BindingConfig {
+
+	@Bean
+    public Consumer<T> consumer() {
+	    // 구현
+    }
+
+	@Bean
+    public Suplier<T> suplier() {
+	    // 구현
+    }
+
+	@Bean
+    public Function<T, T> function() {
+	    // 구현
+    }
+}
+```
+
+Bean 정의에 사용된 함수명은 SCS에서 곧 binding naming에 사용된다. 명명 규칙은 아래와 같다.
+- input - `<function name> + -in- + <index>`
+- output - `<function name> + -out- + <index>`
+Function을 입력 채널로 사용한다고 했을 때 바인딩은 `function-in-0`이 된다. 
+
+```java
+@Bean 
+public Function<Tuple2<Flux<String>, Flux<Integer>>, Flux<String>> gather() {
+	return tuple -> { 
+		Flux<String> stringStream = tuple.getT1(); 
+		Flux<String> intStream = tuple.getT2().map(i -> String.valueOf(i)); 
+		return Flux.merge(stringStream, intStream); 
+	}; 
+}
+```
+index는 하나의  기본적으로 0이지만 바인딩에서 사용하는 인자가 여러개인 경우 더 커질 수도 있다. 위와 같이 하나의 binding에서 여러 유형의 인자를 취하는 경우 
+`gather-in-0`과 `gather-in-1`이 정의된다.
+
+**3.1.2 StreamBridge**
 
 ```java
 @Service
-@EnableBinding({RequestApi.class, ProcessorApi.class})
-public class RequestServiceImpl implements RequestService {
+@RequiredArgsConstructor
+public Service {
 
-    private final RequestApi requestApi;
-    private final ProcessorApi requestApiFromServer;
-
-		@Value("${application.routing.key}")
-		private final String key
-
-    public RequestServiceImpl(RequestApi requestApi, ProcessorApi requestApiFromServer) {
-        this.requestApi = requestApi;
-        this.requestApiFromServer = requestApiFromServer;
-    }
-
-    @Override
-    public void request(String userTopic, String subscribeId, StompHeaderAccessor headerAccessor, PubRequestDto<?> pubRequestDto) {
-
-        headerAccessor.setHeader("sender", key);
-        headerAccessor.setHeader("topic", userTopic);
-        headerAccessor.setHeader("clientSubscriptionId", subscribeId);
-
-        requestApi.request().send(MessageBuilder.withPayload(pubRequestDto)
-                .setHeaders(headerAccessor)
-                .build());
+	private final StreamBridge streamBridge;
+	
+    public void request() {
+	    Message<RequestDto> message = MessageBuilder.withPayload(...).build();
+	    streamBridge.send("Exchange", message);	
     }
 }
 ```
 
-- `@EnableBinding`: 하나 이상의 바인딩 구성 요소 인자를 통해 바인딩을 활성화하며 StreamListener 사용을 가능하게한다.
+Functional 인터페이스를 통해 binding 선언이 가능하지만, 실제 서비스에서는 비즈니스 로직이 메시지를 producing 해야하는 경우가 많다. 이 경우에는 `StreamBridge`를 이용해 destination으로 메시지를 producing 할 수 있다.
 
-Rabbit MQ 내에서는 인터페이스에 정의된 바인딩 네임으로 exchange가 생성된다.
-
-- 이 때 yml 파일을 참조해서 exchange type, group, queue 지정이 가능하다.
-
-**3.1.2 @Input and @Output**
-
-```java
-public interface RequestApi {
-    String API_CALL= "api";
-    String RESPONSE = "api-response";
-
-    @Output(API_CALL)
-    MessageChannel request();
-
-    @Input(RESPONSE)
-    SubscribableChannel response();
-}
-```
-
-이는 바인딩 채널을 정의한 인터페이스이다. 어노테이션 내의 문자열에는 바인딩 시에 취할 채널들이 직접적으로 나타난다. 이를 `@EnableBinding`에 등록 시 2개의 채널(바인딩 브릿지)이 생성된다.
-
-**3.1.2 Accessing Bound Channels**
-
-1. **Injecting Bound Interface**
-
-   각 바인딩 된 인터페이스에 대해 SCS는 인터페이스를 구현하는 bean을 만든다. 이런 빈들의 Input/output 어노테이션된 메소드를 호출하면 관련된 채널이 리턴된다.
-
-   ```java
-   @Override
-   public void request(String userTopic, String subscribeId, StompHeaderAccessor headerAccessor, PubRequestDto<?> pubRequestDto) {
-
-       headerAccessor.setHeader("sender", key);
-       headerAccessor.setHeader("topic", userTopic);
-       headerAccessor.setHeader("clientSubscriptionId", subscribeId);
-
-       requestApi.request().send(MessageBuilder.withPayload(pubRequestDto)
-               .setHeaders(headerAccessor)
-               .build());
-   }
-   ```
-
-   예제에서 requestApi 빈은 `request().send()` 호출 시 output 채널에 메세지를 전송한다. 이는 주입된 `RequestApi` Bean에서 타겟 채널을 찾기 위해 request를 호출한다.
-
-2. **Injecting channels Directly**
-   - 바인딩 된 채널을 직접 주입할 수도 있다.
-   - 어노테이션에 지정된 이름이 메소드명보다 우선으로 채널명에 쓰인다. (@Qualifier 지정)
-
-### 4. Binders
+## 4. Binders
 
 SCS는 외부 미들웨어의 물리적 destination로의 연결에 사용되는 바인더 추상화를 제공한다.
 
@@ -148,7 +123,7 @@ SCS는 외부 미들웨어의 물리적 destination로의 연결에 사용되는
 
 producer는 채널에 메세지를 보내는 데 필요한 구성요소이다. 채널은 브로커의 바인더 구현체를 통해 외부 메세지 브로커에 바인딩 될 수 있다.
 
-### 5. Configuration option
+## 5. Configuration option
 
 SCS는 일반 Config 옵션과 바인더 및 바인딩 Config를 지원한다. 일부 바인더는 미들웨어 관련 기능지원을 위해 추가 바인딩 속성을 허용한다. 구성 옵션은 Spring Boot에서 지원하는 모든 메커니즘(환경 변수, yaml, properties 등)을 통해 SCS 애플리케이션에 제공 가능하다.
 
@@ -193,11 +168,13 @@ SCS는 일반 Config 옵션과 바인더 및 바인딩 Config를 지원한다. �
 
 `spring.cloud.stream.bindings.<channelName>.producer.`를 prefix로 가져야한다.
 
+
 ## 번외. RabbitMQ 설정 관련
 
 ### 1. RabbitMQ Binder Concept
 
-레빗의 바인더 구현체는 각 destination을 `TopicExchange`에 매핑한다. 각 컨슈머그룹을 위해 큐가 `TopicExchange`에 바인딩된다. 각 컨슈머 인스턴스는 해당 그룹의 Queue에 해당하는 RabbitMQ Consumer 인스턴스가 있다. 분할된 프로듀서/컨슈머의 경우 Queue는 파티션 인덱스가 suffix 되며 파티션 인덱스를 라우팅 키로 사용한다.
+레빗의 바인더 구현체는 기본적으로 각 destination을 `TopicExchange`에 매핑한다. 그리고 각 컨슈머 그룹을 위한 Queue가 이 `TopicExchange`에 바인딩된다. 컨슈머 그룹을 사용하지 않고 각 인스턴스마다 Queue를 맺게 만들 수도 있다. 이 경우 fanout exchange를 선언하면 모든 인스턴스가 동일한 메시지를 처리하게 된다.
+> 이는 현재 이벤트 처리, 채팅 메시지 처리 등 팀 내 비즈니스 로직에 응용되고 있다. 
 
 ### 2. RabbitMQ Binder Properties
 

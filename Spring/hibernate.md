@@ -92,12 +92,13 @@ public <S extends T> S save(S entity) {
 
 사실 둘의 용도는 다르다. merge의 경우 detached 상태의 entity를 다시 managed 상태로 복사한 객체를 반환하는 것이다. update의 경우 dirty checking을 사용해도 되기 때문이다. 둘의 용도와 쿼리 발생에 따른 차이를 이해해야 한다. 추가적으로, save에서 항상 반환된 객체를 사용하면 영속성 관련 문제들을 방지할 수 있다.
 
-
-
 ###  saveAll() 사용
 
 JPA의 saveAll을 사용할 경우 INSERT 쿼리가 반복적으로 발생한다. 이 때 hibernate 다음 옵션을 통해 INSERT 쿼리를 한 묶음으로 보낼 수 있다.
 - `hibernate.jdbc.batch_size`
+이 옵션은 다건의 쿼리를 묶어서 DB에 보내 NW 통신을 줄이는 용도이다.
+실제 multi-value insert로 재작성하는 기능이 아니기 때문에 multi-value 최적화까지 하기 위해서는 connector 레벨의 구문 재작성이 필요하다. 이는 jdbc url에 다음 옵션을 추가해 사용 가능하다.
+- jdbc:mysql://localhost:3306/jpa-test?useSSL=false&**rewriteBatchedStatements=true**
 
 #### 영속성 컨텍스트 OOM 문제
 
