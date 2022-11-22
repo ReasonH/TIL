@@ -29,7 +29,7 @@ consumer.close();
 
 파티션보다 컨슈머가 많아지는 경우, 특정 컨슈머는 유휴상태에 있게 된다.
 
-![Untitled](/Kafka/img/02.png)
+![](/Common/Kafka/img/02.png)
 
 따라서 처리량이 떨어져서 컨슈머를 늘렸다면, 파티션도 늘려줘야 한다.
 

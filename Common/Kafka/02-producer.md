@@ -95,7 +95,7 @@ ack = all인 경우 브로커에 위 옵션을 지정해 성공 응답 조건을
 
 브로커의 ack가 늦게와서 재시도할 경우 중복 발송이 가능하다.
 
-![Untitled](/Kafka/img/01.png)
+![](/Common/Kafka/img/01.png)
 
 `enable.idempotence` 속성으로 중복 전송 가능성을 줄일 수 있다.
 
