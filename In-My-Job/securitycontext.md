@@ -245,3 +245,6 @@ DelegatingSecurityContextRunnable의 코드를 보면 Runnable.run()을 호출�
 ---
 **PS**
 매우 드문 상황에 발생하는 케이스였지만, 2차 검증 로직이 없었다면 단순 오류가 아닌 치명적인 보안문제로 이어질 수 있는 케이스였다. 이렇게라도 문제를 찾아서 다행이고, 단순히 사용하고 있던 DelegatingSecurityContextRunnable의 내부 동작을 공부할 기회였다.
+
+참고
+- https://docs.spring.io/spring-security/site/docs/5.0.x/reference/html/concurrency.html#concurrency
