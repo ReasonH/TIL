@@ -154,4 +154,5 @@ appendfsync 옵션의 경우 everysec을 사용하고 있었기 때문에 아마
 현재 고안 중인 방법은 redis log 중 failover 복구 로그를 감지하면 master / slave에 config를 업데이트해주는 간단한 shell script를 만드는 것이다.
 
 ---
-부록으로  [redis-tip](/Common/redis-tip)
+부록으로  [redis-tip](/Common/redis-tip.md)
+
