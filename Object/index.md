@@ -8,5 +8,6 @@
 
 [Chapter3. 역할, 책임, 협력 ](./03-rrc.md)
 
-[Chapter4. 설계 품질과 트레이드 오프](./04-trade-off.md)
+[Chapter4. 설계 품질과 트레이드 오프](05-responsibility.md)
 
+[Chapter5. 책임 할당하기](./05-responsibility.md)
