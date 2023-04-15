@@ -76,7 +76,7 @@ Repository, Service layer 등을 테스트할 때 무의식적으로 @Transactio
 
 ---
 
-### @Cacheable의 transactionAware 이슈
+### [@Cacheable의 transactionAware 이슈](#transactionAware)
 
 스프링의 캐시 추상화를 이용하기 위해서는 CacheManager에 대한 Bean 정의가 필요하다. 팀 내에서는 Redis를 이용해 CacheManager를 다음과 같이 지정하고 있었다.
 

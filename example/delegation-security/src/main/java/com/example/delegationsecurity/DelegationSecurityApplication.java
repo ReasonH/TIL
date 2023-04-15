@@ -1,13 +1,13 @@
-package com.reason.til.practice;
+package com.example.delegationsecurity;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class PracticeApplication {
+public class DelegationSecurityApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(PracticeApplication.class, args);
+        SpringApplication.run(DelegationSecurityApplication.class, args);
     }
 
 }

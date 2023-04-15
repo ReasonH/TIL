@@ -1,4 +1,5 @@
 # SecurityContext 이슈와 회고
+이슈 상황을 재현한 테스트 코드는 [여기](../example/delegation-security/README.md)에서 참고 가능하다.
 
 Spring Security는 Spring 기반의 서버 애플리케이션에서 인증, 인가를 처리해주는 프레임워크다. Spring을 API 백엔드 개발 용도로 사용한다면 대부분의 경우 적용하게 되는 프레임워크이다. 물론, 우리 파트에서 담당하는 API 서버도 이를 사용하고 있었다. 오늘은 Spring Security의 SecurityContextHolder를 사용하며 겪은 이슈를 회고해보려고 한다.
 
@@ -17,9 +18,9 @@ Spring Security에서는 기본적으로 MODE_THREADLOCAL을 사용하기 때문
 ### 비동기 공유 전략
 
 #### MODE_INHERITABLETHREADLOCAL
-그렇다면 비동기 처리를 위해서는 MODE_INHERITABLETHREADLOCAL을 사용하면 될까? 아쉽게도 이는 만능 해결책 이아니다
+그렇다면 비동기 처리 상황에서 SecurityContext를 참조하려면 MODE_INHERITABLETHREADLOCAL을 사용하면 될까? 아쉽게도 이는 해결책 이아니다
 
-대부분의 Java Application이 그렇듯이 우리 또한 TaskExecutor Bean을 만들어서 사용하고 있었다. 이는 스레드 생성으로 발생하는 부하를 줄이기 위해 스레드를 **재사용** 하도록 만든다. 이런 Pool 기반의 Thread를 사용할 때 MODE_INHERITABLETHREADLOCAL을 사용한다면 잘못된 SecurityContext가 채워진 Thread를 다른 유저가 그대로 재사용할 수 있는 것이다. 이 문제는 Spring Security의 [이슈](https://github.com/spring-projects/spring-security/issues/6856#issuecomment-493585232)로도 등록되어 있다.
+대부분의 Java Web Application이 그렇듯이 우리는 ThreadPoolExecutorService를 Bean 정의하는 방식으로 Thread Pool을 사용하고 있었다. 이는 스레드를 **재사용** 하도록 함으로써 생성 비용을 줄인다. 이 때 MODE_INHERITABLETHREADLOCAL을 사용한다면 잘못된 SecurityContext가 채워진 Thread를 다른 유저가 그대로 재사용하는 경우가 생길 수 있다. 이 문제는 Spring Security의 [이슈](https://github.com/spring-projects/spring-security/issues/6856#issuecomment-493585232)로도 등록되어 있다.
 
 ### Spring Concurrency Support
 
@@ -234,7 +235,10 @@ TaskExecutor 정의하는 코드를 보면 DelegatingSecurityContextRunnable 생
 DelegatingSecurityContextRunnable의 코드를 보면 Runnable.run()을 호출하기 직전에 
 `SecurityContextHolder.setContext(this.delegateSecurityContext);`를 이용해 SecurityContextHolder의 값을 설정하고 있다.
 
-대부분의 경우 setContext 직후에 스레드를 얻고 비동기 로직이 수행됐기 때문에 문제가 없었을 것이다. 하지만,비동기 호출의 지연이 발생하고, 스레드 대기로 이어진다면? 외부 스레드의 재사용과 SecurityContext 갱신이 무차별적으로 발생하며 이슈가 생기게 되는 것이다. (그게 이번 사례였다.)
+대부분의 경우 setContext 직후에 스레드를 얻고 비동기 로직이 수행됐기 때문에 문제가 없었을 것이다. 하지만,
+1. 비동기 호출의 지연이 발생해 Task가 즉시 수행되지 못하고
+2. 그 사이 외부 스레드(Tomcat 등)가 먼저 종료된 후 재사용된다면
+3. 새로운 유저 정보로 SecurityContext 갱신이 발생하며 이슈가 생기게 되는 것이다.
 
 ## 개선
 

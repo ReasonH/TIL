@@ -1,10 +1,10 @@
-package com.reason.til.practice;
+package com.example.delegationsecurity;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class PracticeApplicationTests {
+class DelegationSecurityApplicationTests {
 
     @Test
     void contextLoads() {
