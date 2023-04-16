@@ -26,4 +26,3 @@ Refactoring 책 읽고 정리
 
 [12. 상속 다루기](./12-inheritance-handling.md)
 
-참조

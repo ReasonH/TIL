@@ -1,6 +1,0 @@
-secretGenerator:
-- name: kustomize-secret
-  type: kubernetes.io/tls
-  files:
-  - tls.crt=cert.crt # cert.crt 파일로부터 내용 로딩
-  - tls.key=cret.key # cret.key 파일로부터 내용 로딩

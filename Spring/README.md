@@ -12,10 +12,8 @@
 
 6. [각종 Spring Annotation](annotaton.md)
 
-7. [JPA](JPA/jpa.md)
+7. [Hibernate](hibernate.md)
 
-8. [Hibernate](hibernate.md)
+8. [Hibernate 캐시](hibernate-cache.md)
 
-9. [Hibernate 캐시](hibernate-cache.md)
-
-10. [Test](test.md)
+9. [Test에서의 DateTime 고정하기](test-datetime.md)

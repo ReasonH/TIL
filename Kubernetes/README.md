@@ -30,13 +30,13 @@
 
 ### 실습
 
-[6.2 포드(Pod)](practice/6-2.md)
+[6.2 Pod](practice/6-2.md)
 
-[6.3 레플리카셋](practice/6-3.md)
+[6.3 Replicaset](practice/6-3.md)
 
-[6.4 디플로이먼트](practice/6-4.md)
+[6.4 Deployment](practice/6-4.md)
 
-[6.5 서비스](practice/6-5.md)
+[6.5 Service](practice/6-5.md)
 
 [Spring Boot 배포](practice/spring-boot-deploy.md)
 
@@ -44,11 +44,11 @@
 
 [Prometheus - Grafana 연동](practice/prometheus-2.md)
 
-[7.1 네임스페이스](practice/7-1.md)
+[7.1 Namespace](practice/7-1.md)
 
-[7.2.1 컨피그맵](practice/7-2-1.md)
+[7.2.1 Config map](practice/7-2-1.md)
 
-[7.2.2 시크릿](practice/7-2-2.md)
+[7.2.2 Secret](practice/7-2-2.md)
 
 [Spring Boot, Prometheus, Grafana on K8s](practice/spring-boot-prometheus-deploy.md)
 

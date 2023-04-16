@@ -114,7 +114,7 @@ List<String> list = new ArrayList<>();
 ArrayList list = new ArrayList();
 ```
 
-위와 같이 사용하면 compiler는 compile time에 List에 <String>만 저장되어야 한다는 것을 알게 되고, ArrayList로 변경해도 런타임에 동일한 동작을 보장한다. 이러한 타입을 **비 구체화 타입**이라고 한다.
+위와 같이 사용하면 compiler는 compile time에 List에 String만 저장되어야 한다는 것을 알게 되고, ArrayList로 변경해도 런타임에 동일한 동작을 보장한다. 이러한 타입을 **비 구체화 타입**이라고 한다.
 
 > 비 구체화 타입 : 컴파일 타임에 타입 정보 사라짐 → 런타임에도 동일한 동작 보장
 > 구체화 타입 : 타입 정보가 런타임 시에 구체화
@@ -123,7 +123,7 @@ ArrayList list = new ArrayList();
 
 타입 파라미터에 의존적이지 않은 일반 클래스의 메소드를 사용하는 경우, 즉 어떤 타입이 오든 관계가 없을 떄 사용한다. ex) Object의 메소드, `List.clear()`, `List.size()` 등
 
-⇒ 컴파일 타임에 <?>가 지워지지 않는다.
+⇒ 컴파일 타임에 \<?\>가 지워지지 않는다.
 
 ```java
 //타입 파라미터에 상관없이 동작할 수 있다.
@@ -173,7 +173,7 @@ boxTest(new Box<Integer> ());
 boxTest(new Box<Double> ());
 ```
 
-Box<Double>, Box<Integer>는 Box<Number>의 하위 클래스가 아니기 때문에 컴파일 에러가 발생한다.
+Box\<Double\>, Box\<Integer\>는 Box\<Number\>의 하위 클래스가 아니기 때문에 컴파일 에러가 발생한다.
 
 제네릭 클래스나 인터페이스를 상속관계로 정의하고 싶다면 다음과 같이 클래스 or 인터페이스로 정의해야한다.
 
@@ -185,7 +185,7 @@ public interface CustomList<E,P>  extends List<E> {
 }
 ```
 
-### \***\*Bounded wildcard type\*\***
+### Bounded wildcard type
 
 ```java
 List<Integer> list = new ArrayList<>();

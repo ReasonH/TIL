@@ -78,19 +78,19 @@ $ docker run -it centos:latest bash
 
 도커의 또다른 특징은 계층화된 파일 시스템을 사용한다는 점이다. 특정한 이미지로부터 생성된 컨테이너에 변경사항을 더하고 변경된 상태를 새로운 이미지로 만들어내는 것이 가능하다.
 
-[실습-1, 도커 이미지 생명주기](practice/practice1.md)
+[실습-1, 도커 이미지 생명주기](practice1.md)
 
-[실습-2, Dockerfile로 이미지 생성](practice/practice2.md)
+[실습-2, Dockerfile로 이미지 생성](practice2.md)
 
-[실습-3, 도커 이미지로 서버 애플리케이션 배포](practice/practice3.md)
+[실습-3, 도커 이미지로 서버 애플리케이션 배포](practice3.md)
 
 ---
 
 명령어 익히기
 
-[02. 도커 컨테이너 배포](practice/cmd-practice2.md)
+[02. 도커 컨테이너 배포](cmd-practice2.md)
 
-[03. 컨테이너 실전 구축 및 배포](practice/cmd-practice3.md)
+[03. 컨테이너 실전 구축 및 배포](cmd-practice3.md)
 
 ### 향후 공부해야할 것들...
 - 컨테이너 데이터 보존을 위한 데이터 볼륨 설정

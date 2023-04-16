@@ -131,7 +131,7 @@ $ docker run -d -p 9999:80 이미지명
 
 이제 페이지를 요청해본다.
 
-![](../img/2.png)
+![](In-My-Job/Docker/img/2.png)
 
 ### 도커 이미지 빌드 과정
 
