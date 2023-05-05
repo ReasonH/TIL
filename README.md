@@ -27,7 +27,7 @@
 
 #### Redis
 - [Cacheable](Redis/cacheable.md)
-- [Redis + Transaction](Redis/redisTemplate.md)
+- [Redis와 Transaction 결합, 그리고 TransactionTemplate](Redis/redisTemplate.md)
 - [레디스 팁](Redis/redis-tip.md)
 
 #### Docker / K8s
