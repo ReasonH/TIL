@@ -1,0 +1,6 @@
+port 6370
+cluster-enabled yes
+bind 0.0.0.0
+cluster-node-timeout 5000
+cluster-config-file nodes.conf
+cluster-require-full-coverage no

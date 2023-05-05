@@ -1,0 +1,1 @@
+echo yes | build/resources/main/binary/redis/redis-cli --cluster create 127.0.0.1:6370 127.0.0.1:6371 127.0.0.1:6380 127.0.0.1:6381 127.0.0.1:6372 127.0.0.1:6382 --cluster-replicas 1
