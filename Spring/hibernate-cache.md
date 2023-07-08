@@ -106,9 +106,6 @@ JPA는 2.0에 와서 캐시 표준을 정의했다. 이는 여러 구현체가 �
 - region의 이름은 정규화된 클래스 경로이다.
 ---
 출처
-
-[https://hazelcast.com/glossary/hibernate-second-level-cache/](https://hazelcast.com/glossary/hibernate-second-level-cache/)
-
-[https://joosjuliet.github.io/hibernate_structure/](https://joosjuliet.github.io/hibernate_structure/)
-
-[https://www.baeldung.com/hibernate-second-level-cache](https://www.baeldung.com/hibernate-second-level-cache)
+- [https://hazelcast.com/glossary/hibernate-second-level-cache/](https://hazelcast.com/glossary/hibernate-second-level-cache/)
+- [https://joosjuliet.github.io/hibernate_structure/](https://joosjuliet.github.io/hibernate_structure/)
+- [https://www.baeldung.com/hibernate-second-level-cache](https://www.baeldung.com/hibernate-second-level-cache)

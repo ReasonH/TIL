@@ -29,7 +29,7 @@ class CacheServiceTest {
     }
 
     @Test
-    @DisplayName("서비스 트랜잭션 O")
+    @DisplayName("@Transactional 서비스, 예외 미발생")
     void test() {
         cacheService.increment(testKey, false);
         Integer result = redisTemplate.opsForValue().get(testKey);
@@ -37,7 +37,7 @@ class CacheServiceTest {
     }
 
     @Test
-    @DisplayName("서비스 트랜잭션 O, 예외 발생")
+    @DisplayName("@Transactional 서비스, 예외 발생")
     void test2() {
         Assertions.assertThatThrownBy(() -> cacheService.increment(testKey, true)).isInstanceOf(Exception.class);
         Integer result = redisTemplate.opsForValue().get(testKey);
@@ -45,16 +45,14 @@ class CacheServiceTest {
     }
 
     @Test
-    @DisplayName("서비스 트랜잭션 O, 레디스 트랜잭션 내에서 값 가져오기" +
-            "레디스 트랜잭션 실행 중 값을 조회할 수 없다.")
+    @DisplayName("@Transactional 서비스 내에서 Tx support on인 redisTemplate으로 값 조회")
     void test3() {
         Integer result = cacheService.incrementAndGet(testKey);
         assertThat(result).isNull();
     }
 
     @Test
-    @DisplayName("서비스 트랜잭션 X, 레디스 트랜잭션 내에서 값 가져오기" +
-            "@Transactional이 없는 경우 레디스 트랜잭션은 동작하지 않는다.")
+    @DisplayName("일반 서비스 내에서 Tx support on인 redisTemplate으로 값 조회")
     void test4() {
         Integer result = cacheService.incrementAndGetNonTx(testKey);
         assertThat(result).isEqualTo(1);
@@ -62,8 +60,8 @@ class CacheServiceTest {
 
     @Test
     @DisplayName("redisTemplate 복합 사용 케이스" +
-            "1. tx support 켜진 redisTemplate으로 값 증가" +
-            "2. tx support 안켜진 redisTemplate으로 값 증가 및 조회")
+            "1. tx support on인 redisTemplate으로 값 증가" +
+            "2. tx support off인 redisTemplate으로 값 증가 및 조회")
     void test5() {
         Integer result = cacheService.incrementAndGetComplex(testKey);
         assertThat(result).isNull();
@@ -71,8 +69,8 @@ class CacheServiceTest {
 
     @Test
     @DisplayName("redisTemplate 복합 사용 케이스" +
-            "1. tx support 켜진 redisTemplate으로 값 증가" +
-            "2. tx support 안켜진, 다른 connection factory 사용하는 redisTemplate으로 값 증가 및 조회")
+            "1. tx support on인 redisTemplate으로 값 증가" +
+            "2. tx support off + 다른 connection factory 사용하는 redisTemplate으로 값 증가 및 조회")
     void test6() {
         Integer result = cacheService.incrementAndGetComplexOtherCp(testKey);
         assertThat(result).isEqualTo(1);

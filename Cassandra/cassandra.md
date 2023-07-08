@@ -2,7 +2,6 @@
 
 Cassandra 관련, 필요할 때마다 공부했던 부분들을 정리
 
-
 ## 1. Cassandra Concept
 ### 특징
 - Key-Value 형태의 NoSQL DB
