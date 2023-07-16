@@ -24,10 +24,12 @@
 #### Cassandra
 - [Cassandra](Cassandra/cassandra.md)
 - [Cassandra TTL](Cassandra/cassandra-ttl.md)
+- [Cassandra Component](Cassandra/cassandra-component.md)
 
 #### Redis
 - [Cacheable](Redis/cacheable.md)
 - [Redis와 Transaction 결합, 그리고 TransactionTemplate](Redis/redisTemplate.md)
+- [redisson local cache](Redis/redisson-localcache.md)
 - [레디스 팁](Redis/redis-tip.md)
 
 #### Docker / K8s
