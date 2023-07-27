@@ -19,3 +19,5 @@
 9. [Test에서의 DateTime 고정하기](test-datetime.md)
 
 10. [Hikari CP](hikariCP.md)
+
+11. [갑작스러운 테스트 PayloadHandlingException 처리](rest-docs-PayloadHandlingException.md)
