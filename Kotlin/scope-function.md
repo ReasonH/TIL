@@ -8,11 +8,11 @@
 
 ```kotlin
 data class Person(
-		var name: String = "",
-		var age: Int = 0,
-		var temperature: Float = 36.5f
+	var name: String = "",
+	var age: Int = 0,
+	var temperature: Float = 36.5f
 ) {
-		fun isSick(): Boolean = temperature > 37.5f
+	fun isSick(): Boolean = temperature > 37.5f
 }
 ```
 
@@ -28,9 +28,9 @@ apply는 수신객체 내부 프로퍼티를 변경하고, 수신객체 자체�
 
 ```kotlin
 val person = Person().apply {
-		name = "Lee"
-		age = 29
-		temperature = 36.3f
+	name = "Lee"
+	age = 29
+	temperature = 36.3f
 }
 ```
 
@@ -46,8 +46,8 @@ run은 apply와 똑같이 동작하지만, 수신객체가 아닌 블럭의 마�
 
 ```kotlin
 val isPersonSick = person.run {
-		temperature = 37.3f
-		isSick() // 반환
+	temperature = 37.3f
+	isSick() // 반환
 }
 ```
 
@@ -61,8 +61,8 @@ run과 완전히 동일하지만, with은 수신객체를 파라미터로 받아
 
 ```kotlin
 val isPersonSick = with(person) {
-		temperature = 37.3f
-		isSick() // 반환
+	temperature = 37.3f
+	isSick() // 반환
 }
 ```
 

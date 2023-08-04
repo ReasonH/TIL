@@ -6,7 +6,7 @@
 간단히 말하자면 Java ORM tool이자 JPA의 구현체이다. 
 
 ### Hibernate Architecture
-![](img/hibernate-architecture.png)
+![](hibernate-architecture.png)
 
 Hibernate는 Application과 DB 사이에서 연결과 매핑 등 구성 정보를 로드하며 영속 객체 생성을 담당한다.
 
