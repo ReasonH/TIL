@@ -2,66 +2,66 @@
 
 ### 원인 파악
 
-우리는 Entity에 대한 Second level cache(2lv cache)를 사용 하고 있다. 팀원 분께서 작업 중 Entity class에서 미사용 필드를 제거한 뒤 관련된 2lv cache의 버전을 올리지 않았는데, 이 상태로 배포가 되며 오류가 발생한 것이었다.
-- **JPA query가 수행될 때 2lv cache를 조회하며 이 과정에서 ClassCastException이 발생**
+우리는 Entity에 대한 Second level cache(2lv cache)를 사용 하고 있다. 팀원 분께서 작업 중 Entity class에서 미사용 필드를 제거한 뒤 관련된 2lv cache의 버전을 올리지 않았는데, 이 상태로 배포가 되며 캐시와 Entity 객체의 맵핑이 깨져 오류가 발생한 것이었다.
+- **JPA query가 수행 시, 2lv cache를 조회하며 ClassCastException발생**
 
 ### 또 다른 문제?
 
-해당 2lv cache의 버전을 올리면서 오류는 금방 해결됐지만 또 다른 문제가 있었다.
+해당 Entity의 2lv cache 버전을 올리면서 (키 값 수정) 오류는 금방 해결됐지만, 또 다른 문제가 있었다.
 
-해당 API는 내부적으로 여러 데이터를 조회해서 리스트 형태의 결과를 만들어주는데, 일부 항목에서 예외가 발생하더라도 정상적인 데이터는 반환이 되도록 설계된 상태였다. 그러나 위에서 발생한 이슈에서는 한 건이라도 예외가 발생하면 UnexpectedRollbackException을 반환하며 API 호출 자체가 실패하고 있었다. 
+문제가 되는 API는 내부적으로 여러 데이터를 조회해서 리스트 형태의 결과를 만들어주는데, 일부 항목에서 예외가 발생하더라도 정상적인 데이터는 반환이 되도록 설계된 상태였다. 그러나 위에서 발생한 이슈에서는 한 건이라도 예외가 발생하면 UnexpectedRollbackException을 반환하며 API 호출 자체가 실패하고 있었다. 
 
 나는 이를 개선해서 일부 항목 오류가 있어도 정상 조회된 항목들은 클라이언트에 전달을 해야 한다고 생각했다.
 
 ### noRollbackFor를 사용한 이슈 처리
 
-API 서비스 메서드는 대략 다음과 같은 호출 구조를 띄고 있었다. 하위 트랜잭션에서 발생한 예외를 외부에서 try - catch하는 구조였는데, 일단 이게 문제라는 건 금방 눈치챌 수 있었다. 
+API 서비스 메서드는 대략 다음과 같은 호출 구조를 띄고 있다. 하위 트랜잭션에서 발생한 예외를 외부에서 try - catch하는 구조였는데, 이게 문제라는 건 금방 눈치챌 수 있었다. 
 
 ```java
 @Service
 public class Service {
 
-		@Autowired
-		private InnerService innerService;
-	
-		@Transactional(readOnly = true)
-		public ResultListDto getResult(List<Long> ids) {
-				// ... some
-				for (Long id : ids) {
-				try {
-						resultList.pushResult(innerService.getResult(id));
-				} catch (Exception e) {
-						
-				}				
-				// ... some
-				return resultList;
-		}
+	@Autowired
+	private InnerService innerService;
+
+	@Transactional(readOnly = true)
+	public ResultListDto getResult(List<Long> ids) {
+		// ... some
+		for (Long id : ids) {
+		try {
+				resultList.pushResult(innerService.getResult(id));
+		} catch (Exception e) {
+				
+		}				
+		// ... some
+		return resultList;
+	}
 }
 ```
 
 ```java
 @Service
 public class InnerService {
-		@Transactional(readOnly = true)
-		public Result getResult(Long id) {
-		  // ...
-		}
+	@Transactional(readOnly = true)
+	public Result getResult(Long id) {
+	  // ...
+	}
 }
 ```
 
-내부에서 발생한 예외가 global rollback을 marking한다는 것은 이미 잘 아는 사실이었기 때문이다. (이 부분은 아마 누군가의 실수로 작업된 레거시 코드가 오랫동안 남아있던 게 아닐까 추측한다.)
+내부에서 발생한 예외가 global rollback을 marking하기 때문이다. (이 부분은 아마 누군가의 실수로 작업된 레거시 코드가 오랫동안 남아있던 게 아닐까 추측한다.)
 - 관련 글: [https://techblog.woowahan.com/2606/](https://techblog.woowahan.com/2606/)
 
-원인을 알았으니 문제를 고치는 것은 금방 할 수 있다. 하위 메서드 트랜잭션 선언부에 `noRollbackFor = ClassCastException.class`을 추가했다.
+문제를 고치는 것은 금방 할 수 있다. 하위 메서드 트랜잭션 선언부에 `noRollbackFor = ClassCastException.class`을 추가했다.
 
 그러나, 잘 동작할 줄 알았던 API는 여전히 동일한 예외를 반환하고 있었다.
 ```bash
 org.springframework.transaction.UnexpectedRollbackException: Transaction silently rolled back because it has been marked as rollback-only
 ```
 
-noRollbackFor 옵션이 동작을 안 하는 건가 싶어 `noRollbackFor = RuntimeException.class` 로 모든 런타임 예외를 처리하도록 수정했음에도 동일한 이슈가 발생했다. 특이한 점은, 문제가 되던 쿼리 수행 전에 직접 `throw RuntimeException()` 등을 발생시켰을 때는 noRollbackFor 옵션이 정상 동작했다는 사실이다. 이 차이는 어디서 오는것일까? 
+noRollbackFor 옵션이 동작을 안 하는 건가 싶어 `noRollbackFor = RuntimeException.class` 로 모든 런타임 예외를 처리하도록 수정했음에도 동일한 이슈가 발생했다. 특이한 점은, 문제가 되는 쿼리 수행 전 직접 `throw RuntimeException()` 를 통해 예외를 발생시키는 경우에는 noRollbackFor 옵션이 정상 동작했다 것이다. 이 차이는 어디서 오는것일까? 
 
-내부 구조를 살펴보기로 했다.
+내부 구조를 살펴보자.
 
 ### Case1) 쿼리에서 발생한 RuntimeException
 
@@ -71,36 +71,36 @@ JPA method name query를 통해 엔티티를 조회하면 다음과 같은 과�
 
 ```java
 public <T> T find(Class<T> entityClass, Object primaryKey, LockModeType lockModeType, Map<String, Object> properties) {
-		this.checkOpen();
-		LockOptions lockOptions = null;
-		
-		String entityName;
-		try {
-		    this.getLoadQueryInfluencers().getEffectiveEntityGraph().applyConfiguredGraph(properties);
-		    Boolean readOnly = properties == null ? null : (Boolean)properties.get("org.hibernate.readOnly");
-		    this.getLoadQueryInfluencers().setReadOnly(readOnly);
-		    IdentifierLoadAccess<T> loadAccess = this.byId(entityClass);
-		    loadAccess.with(this.determineAppropriateLocalCacheMode(properties));
-		    if (lockModeType != null) {
-		        if (!LockModeType.NONE.equals(lockModeType)) {
-		            this.checkTransactionNeededForUpdateOperation();
-		        }
-		
-		        lockOptions = this.buildLockOptions(lockModeType, properties);
-		        loadAccess.with(lockOptions);
-		    }
-		
-		    if (this.getLoadQueryInfluencers().getEffectiveEntityGraph().getSemantic() == GraphSemantic.FETCH) {
-		        this.setEnforcingFetchGraph(true);
-		    }
-		
-		    Object var25 = loadAccess.load((Serializable)primaryKey);
-		    return var25;
-		} catch (EntityNotFoundException var17) {
-				// 중략
-		} catch (TypeMismatchException | ClassCastException | MappingException var20) {
-		    throw this.getExceptionConverter().convert(new IllegalArgumentException(var20.getMessage(), var20));
-		// 이하 생략
+	this.checkOpen();
+	LockOptions lockOptions = null;
+	
+	String entityName;
+	try {
+		this.getLoadQueryInfluencers().getEffectiveEntityGraph().applyConfiguredGraph(properties);
+		Boolean readOnly = properties == null ? null : (Boolean)properties.get("org.hibernate.readOnly");
+		this.getLoadQueryInfluencers().setReadOnly(readOnly);
+		IdentifierLoadAccess<T> loadAccess = this.byId(entityClass);
+		loadAccess.with(this.determineAppropriateLocalCacheMode(properties));
+		if (lockModeType != null) {
+			if (!LockModeType.NONE.equals(lockModeType)) {
+				this.checkTransactionNeededForUpdateOperation();
+			}
+	
+			lockOptions = this.buildLockOptions(lockModeType, properties);
+			loadAccess.with(lockOptions);
+		}
+	
+		if (this.getLoadQueryInfluencers().getEffectiveEntityGraph().getSemantic() == GraphSemantic.FETCH) {
+			this.setEnforcingFetchGraph(true);
+		}
+	
+		Object var25 = loadAccess.load((Serializable)primaryKey);
+		return var25;
+	} catch (EntityNotFoundException var17) {
+			// 중략
+	} catch (TypeMismatchException | ClassCastException | MappingException var20) {
+		throw this.getExceptionConverter().convert(new IllegalArgumentException(var20.getMessage(), var20));
+	// 이하 생략
 ```
 
 find method에서 Entity를 로드할 때 `ClassCastException` 등의 특정 예외가 발생하는 경우 `this.getExceptionConverter().convert()`를 호출한다.
@@ -292,4 +292,4 @@ Case1에서 나온 `JdbcResourceLocalTransactionCoordinatorImpl`의 `markRollbac
 
 일반적으로 Hibernate 세션에서 오류가 발생한 경우 해당 세션을 재사용하지 않아야 한다고 한다. 즉 실패처리는 의도된 것이기 때문에 rollback을 피해가려 하는 것은 옳지 않다는 뜻으로 보인다. 읽어보니 맞는 말이다. 세션 오류는 발생하지 않도록 철저히 대비하는게 답이다.
 
-PS. `ObjectDeletedException`, `ObjectNotFoundException` 등의 예외에서는 rollback 마킹이 없는 것으로 미루어 보아 간헐적으로 발생할 가능성이 있는 예외는 rollback 처리를 하지 않는 건가?
+PS. `ObjectDeletedException`, `ObjectNotFoundException` 등의 예외에서는 rollback 마킹을 하지 않는다. 이 기준은 뭘까?

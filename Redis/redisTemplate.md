@@ -54,7 +54,7 @@ public RedisTemplate<String, Object> redisTemplateTransactional(RedisConnectionF
 
 문제점
 1. 일부 키 삽입 로직의 경우 트랜잭션 커밋 이전에 예외적으로 즉시 반영이 되어야 하는 경우가 있었다. 일괄적으로 옵션을 적용하는 경우 이를 제어할 수 없다는 문제가 있다.
-2. Lettuce의 경우 CLUSTER MODE에서 MULTI 커맨드를 사용하는 경우 에러가 발생한다. (해당 이슈는 Redisson을 사용하는 경우 발생하지 않는다.)
+2. Multi key operation 에서 해당 key들의 Hash slot이 서로 다른 노드에 위치해 있다면 수행이 불가능하다. (EVAL을 이용한 Redis transaction 등)
 
 ### TransactionSupport를 위한 다른 방법은 없을까?
 

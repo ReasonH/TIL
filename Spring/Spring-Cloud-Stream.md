@@ -63,19 +63,19 @@ SCS 3.0 이상부터는 기존의 @EnableBinding이 Deprecated 되었으며 함�
 public class BindingConfig {
 
 	@Bean
-    public Consumer<T> consumer() {
-	    // 구현
-    }
-
+	public Consumer<T> consumer() {
+	// 구현
+	}
+	
 	@Bean
-    public Suplier<T> suplier() {
-	    // 구현
-    }
-
+	public Suplier<T> suplier() {
+	// 구현
+	}
+	
 	@Bean
-    public Function<T, T> function() {
-	    // 구현
-    }
+	public Function<T, T> function() {
+	// 구현
+	}
 }
 ```
 
@@ -107,8 +107,8 @@ public Service {
 	private final StreamBridge streamBridge;
 	
     public void request() {
-	    Message<RequestDto> message = MessageBuilder.withPayload(...).build();
-	    streamBridge.send("Exchange", message);	
+		Message<RequestDto> message = MessageBuilder.withPayload(...).build();
+		streamBridge.send("Exchange", message);	
     }
 }
 ```

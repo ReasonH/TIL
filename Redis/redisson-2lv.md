@@ -162,6 +162,6 @@ delay는 초기에 5초로 시작하며 지속적으로 이전에 지워진 키�
 
 단순히 생각해본다면 이는 Redis에 부하를 일으키는 TTL 적용 방식으로 보인다. 그럼에도 불구하고 이런 클라이언트 사이드 관리 방식을 고수하는 것은 Redis Hash에서 entry별 TTL을 지원하지 않기 때문이다. 만약, 모든 entry에 대한 만료를 Redis 서버로 관리하기 위해 한 개의 Entity마다 독립적인 캐시를 만든다면 어떨까?
 
-관련된 [이슈]([https://github.com/redisson/redisson/issues/1064](https://github.com/redisson/redisson/issues/1064)는 이미 오래전에 논의가 됐었다. 내용을 요약하면 다음과 같다.
+관련된 [이슈](https://github.com/redisson/redisson/issues/1064](https://github.com/redisson/redisson/issues/1064)는 이미 오래전에 논의가 됐었다. 내용을 요약하면 다음과 같다.
 -   Redis 메모리 사용량을 매우 높일 수 있다.
 -   클라이언트에서 관리하는 방식은 실제 Redis 서버 내부 동작을 모티브로 하며 스케쥴링 빈도는 더 낮기때문에 부하에 큰 영향을 주지 않는다.
