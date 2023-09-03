@@ -17,6 +17,7 @@
 
 ### JPA, Hibernate
 - [JPA](JPA/README.md)
+- [트랜잭션 내에서의 각종 동작 정리](JPA/transactional-test.md)
 - [Hibernate](Hibernate/hibernate.md)
 - [Hibernate 캐시](Hibernate/hibernate-cache.md)
 - [주요 Hikari CP 설정](Hibernate/hikariCP.md)
