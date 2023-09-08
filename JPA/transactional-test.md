@@ -2,6 +2,14 @@
 spring transaction manager 및 JPA가 다양한 상황에서 어떻게 동작하는지 확인한다.
 모든 테스트 코드는 [여기](../example/transactional-test-integration/README.md)에서 참고 가능하다.
 
+ * [트랜잭션 전파 레벨에 따른 RuntimeException 롤백 처리](#---------------runtimeexception------)
+ * [다른 스레드에 전달된 영속성 객체](#------------------)
+ * [트랜잭션이 종료된 영속성 객체 반환 시 동작](#------------------------)
+ * [이벤트 리스너에서의 영속성](#--------------)
+ * [1차 캐시와 Flush](#1------flush)
+ * [1차 캐시와 JPQL](#1------jpql)
+ * [JPA isolation](#JPA-isolation)
+
 ### 트랜잭션 전파 레벨에 따른 RuntimeException 롤백 처리  
 `RuntimeExceptionServiceTest` 참고  
   
@@ -53,11 +61,11 @@ spring transaction manager 및 JPA가 다양한 상황에서 어떻게 동작하
 `FirstCacheServiceTest` 참고  
   
 @Transactional에서는 다음과 같은 상황이 벌어질 수 있다.  
-  
-> 1. A라는 유니크 컬럼에 a라는 값이 지정되어 있는 영속성 객체 X가 존재  
-> 2. X의 A컬럼 값을 a → b로 수정  
-> 3. Y라는 엔티티를 생성해서 A컬럼 값을 a로 지정  
-> 4. Y를 영속화하려 하면 unique column duple로 인한 Exception 발생  
+
+	1. A라는 유니크 컬럼에 a라는 값이 지정되어 있는 영속성 객체 X가 존재  
+	2. X의 A컬럼 값을 a → b로 수정  
+	3. Y라는 엔티티를 생성해서 A컬럼 값을 a로 지정  
+	4. Y를 영속화하려 하면 unique column duple로 인한 Exception 발생  
   
 이는 변경감지가 반영되지 않은 상태에서 이미 DB에 존재하는 유니크 값으로 엔티티를 저장하려 해서 발생하는 예외이다.   
 dirty-checking은 기본적으로 flush 단계에서 수행되며 flush는 commit시 자동으로 호출된다.  
@@ -91,3 +99,12 @@ flush 내에서도 쿼리가 반영되는 순서가 다른데, Hibernate에서�
   3. Team.members.size() 조회 결과는 0  필드 갱신의 경우 flush 시점에 이미 영속성 객체의 값 또한 갱신된 상태이기 때문에 조회된 값이 버려져도 상관이 없다.  
 그러나 양방향 연관관계가 설정된 상태에서 한 쪽만 객체 설정을 해준 경우 문제가 발생할 수 있다.   
 이 때의 해결 방법은 연관관계 편의 메서드를 통해 Member의 Team 삽입 시, Team의 Member도 추가하는 것이다. 
+
+### JPA isolation
+`IsolationServiceTest` 참고
+
+JPA 사용 시, 트랜잭션의 기본 isolation 전략은 DB 전략을 따라간다. 이는 익히 아는 사실이지만, JPA + Hiberanate를 사용할 때는 주의할 점이 하나 더 있다. 1차 캐시로 인해 대부분의 동작에서 Application level의 REPEATABLE READ가 보장된다는 점이다.
+
+`@Transactional`로 명시된 메서드 A에서 동일한 엔티티를 여러 번 조회하는 경우를 가정해보자. 중간에 다른 트랜잭션에 해당 엔티티를 갱신하더라도 메서드 A 내에서의 조회 결과는 절대 바뀌지 않는다. 이는 `isolation =Isolation.REPEATABLE_READ`와 `Isolation.READ_COMMITTED`를 사용하는 경우 모두 동일하다.
+
+	그렇다고 isolation level 설정이 전혀 의미없는 것은 아니다. Projection과 같이 영속성 컨텍스트를 이용하지 않는 조회 시에는 isolation 설정이 적용되기 때문이다. 
