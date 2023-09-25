@@ -30,6 +30,7 @@
 - [동기화 키워드](Java/sync-keyword.md)
 - [람다 캡쳐링과 Final](Java/effectively-final.md)
 - [병렬 스트림](Java/parallelStream.md)
+- [Virtual Thread](Java/virtual-thread.md)
 
 #### Kotlin
 - [Companion object란?](Kotlin/companion-object.md)
@@ -40,6 +41,7 @@
 #### MySQL
 - [mySQL 팁](MySQL/mySQL.md)
 - [mySQL의 쿼리분석](MySQL/explain.md)
+- [인덱스에 관한 각종 정리](MySQL/index.md)
 
 #### Cassandra
 - [Cassandra](Cassandra/cassandra.md)

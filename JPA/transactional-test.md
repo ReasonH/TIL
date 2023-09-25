@@ -2,15 +2,15 @@
 spring transaction manager 및 JPA가 다양한 상황에서 어떻게 동작하는지 확인한다.
 모든 테스트 코드는 [여기](../example/transactional-test-integration/README.md)에서 참고 가능하다.
 
- * [트랜잭션 전파 레벨에 따른 RuntimeException 롤백 처리](#---------------runtimeexception------)
- * [다른 스레드에 전달된 영속성 객체](#------------------)
- * [트랜잭션이 종료된 영속성 객체 반환 시 동작](#------------------------)
- * [이벤트 리스너에서의 영속성](#--------------)
- * [1차 캐시와 Flush](#1------flush)
- * [1차 캐시와 JPQL](#1------jpql)
+ * [트랜잭션 전파 레벨에 따른 RuntimeException 롤백 처리](#트랜잭션-전파-레벨에-따른-RuntimeException-롤백-처리)
+ * [다른 스레드에 전달된 영속성 객체](#다른-스레드에-전달된-영속성-객체)
+ * [트랜잭션이 종료된 영속성 객체 반환 시 동작](#트랜잭션이-종료된-영속성-객체-반환-시-동작)
+ * [이벤트 리스너에서의 영속성](#이벤트-리스너에서의-영속성)
+ * [1차 캐시와 JPQL](#1차-캐시와-JPQL)
+ * [1차 캐시와 JPQL](#1차-캐시와-JPQL)
  * [JPA isolation](#JPA-isolation)
 
-### 트랜잭션 전파 레벨에 따른 RuntimeException 롤백 처리  
+### 트랜잭션 전파 레벨에 따른 RuntimeException 롤백 처리
 `RuntimeExceptionServiceTest` 참고  
   
 부모-자식 관계의 트랜잭션은 자식 트랜잭션 전파레벨에 따라 다음과 같이 동작한다.  

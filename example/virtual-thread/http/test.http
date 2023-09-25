@@ -1,0 +1,5 @@
+GET http://localhost:8080/query
+
+###
+
+GET http://localhost:8080/block

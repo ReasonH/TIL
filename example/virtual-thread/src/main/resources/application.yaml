@@ -1,0 +1,26 @@
+spring:
+  threads:
+    virtual:
+      enabled: false
+  datasource:
+    url: jdbc:mysql://localhost:3306/exercise?useSSL=false&useUnicode=true&characterEncoding=UTF-8
+    username: root
+    password: 1234
+    hikari:
+      minimum-idle: 100
+      maximum-pool-size: 100
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+    properties:
+      hibernate.format_sql: true
+      hibernate.dialect: org.hibernate.dialect.MySQL55Dialect
+
+logging:
+  level:
+    ROOT: INFO
+    org.hibernate: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    com.zaxxer.hikari: TRACE
+    com.mysql.cj.jdbc: TRACE
