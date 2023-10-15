@@ -68,6 +68,7 @@ void loom() throws InterruptedException {
 ### Thread block Jmeter Test
 
 ![](img/v-thread-01.png)
+
 위 환경에서 가상 스레드와 플랫폼 스레드 사용 시 성능을 비교해본다.
 
 #### Platform Thread
@@ -103,3 +104,94 @@ long 쿼리 상황을 가정해서 테스트해본다.
 DB를 사용할 때는 2배 가량의 차이가 난다. DB connection pool이라는 외부 제약 사항이 존재하기 때문에 드라마틱한 변화는 없는 것으로 보인다. (물론 2배 가까이 차이나는 것도 큰 차이긴 하다)
 
 가상 스레드는 훌륭한 도구지만 만능 열쇠는 아니다. DB와 함께 사용할 경우 DB, Application 양쪽의 CP 수치를 튜닝하면서 적절한 지점을 찾아야 할 것으로 보인다. 
+
+## 기타 특징
+### Pinned
+
+특정 케이스에서 가상 스레드의 blocking operation이 캐리어 스레드(플랫폼 스레드)로부터 unmount 되지 않는 경우가 있다. 이 경우 JVM은 (maxPoolSize 제한에 걸리지 않는 선에서) 캐리어 풀에 새로운 스레드를 할당할 수 있다. 이는 에러가 아니지만 애플리케이션 확장성을 저해하는 요소가 될 수 있다.
+
+현재 이런 Pinned 현상이 나타나는 경우는 두 가지이다.
+
+- `synchronized` 블록 또는 메서드 내에서 실행되는 코드
+- JNI를 사용해 네이티브 라이브러리를 호출하는 경우
+
+### synchronized 블록 예제
+
+```java
+static class Bathroom {
+  synchronized void useTheToilet() {
+    log("I'm going to use the toilet");
+    sleep(Duration.ofSeconds(1L));
+    log("I'm done with the toilet");
+  }
+}
+
+static Bathroom bathroom = new Bathroom();
+
+static Thread goToTheToilet() {
+  return virtualThread(
+      "Go to the toilet",
+      () -> bathroom.useTheToilet());
+}
+
+@SneakyThrows
+static void twoEmployeesInTheOffice() {
+  var riccardo = goToTheToilet();
+  var daniel = takeABreak();
+  riccardo.join();
+  daniel.join();
+}
+```
+
+이런 Pinned 현상을 찾아내기 위해서는 다음과 같은 옵션을 사용할 수 있다.
+
+```bash
+-Djdk.tracePinnedThreads=full (or short)
+```
+
+### 현재 해결 방안 - Lock API 사용
+
+동기화 블록은 곧 unmount가 가능해질 것이다. 그러나 더 좋은 방법은 Lock API를 사용하는 것이다. 이는 virtual thread를 pinning 하지 않기 때문에 스케쥴링을 작동시킬 수 있다.
+
+```java
+static class Bathroom {
+  private final Lock lock = new ReentrantLock();
+  
+  @SneakyThrows
+  void useTheToiletWithLock() {
+    if (lock.tryLock(10, TimeUnit.SECONDS)) {
+      try {
+        log("I'm going to use the toilet");
+        sleep(Duration.ofSeconds(1L));
+        log("I'm done with the toilet");
+      } finally {
+        lock.unlock();
+      }
+    }
+  }
+}
+
+static Thread goToTheToiletWithLock() {
+  return virtualThread("Go to the toilet", () -> bathroom.useTheToiletWithLock());
+}
+
+@SneakyThrows
+static void twoEmployeesInTheOfficeWithLock() {
+  var riccardo = goToTheToiletWithLock();
+  var daniel = takeABreak();
+  riccardo.join();
+  daniel.join();
+}
+```
+
+### Thread Pool
+
+기존에는 Thread 사용 시, 생성 비용 등을 염두해 Thread Pool 또는 ExecutorService 등을 사용했다. 그러나 가상 스레드를 사용하면 더 이상 이런 것은 의미가 없다. 가상 스레드 자체가 생성 비용이 매우 적고, 요청마다 새로운 스레드를 만든다는 아이디어에서 시작됐기 때문이다.
+
+### Thread Local in V thread
+
+가상 스레드는 매우 많이 만들어질 수 있기에 스레드 로컬을 사용하는게 좋은 생각은 아니다. OOM의 원인이 될 수도 있다. 일반적으로 하나의 요청당 하나의 가상 스레드를 할당하는 시나리오에서는 서로 다른 요청 간 데이터가 공유되지 않기에 ThreadLocal을 사용할 필요가 없다.
+
+---
+참고
+https://blog.rockthejvm.com/ultimate-guide-to-java-virtual-threads/#7-threadlocal-and-thread-pools

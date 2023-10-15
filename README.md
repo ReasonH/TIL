@@ -33,6 +33,8 @@
 - [Virtual Thread](Java/virtual-thread.md)
 
 #### Kotlin
+- [코틀린 기본1](Kotlin/kotlin-basic-01.md)
+- [코틀린 기본2](Kotlin/kotlin-basic-02.md)
 - [Companion object란?](Kotlin/companion-object.md)
 - [코틀린의 범위 지정 함수](Kotlin/scope-function.md)
 - [각종 키워드](Kotlin/keyword.md)
