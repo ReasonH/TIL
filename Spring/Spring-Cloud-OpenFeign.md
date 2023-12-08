@@ -18,10 +18,9 @@
 @EnableFeignClients // Feign Client를 사용할 것임을 알려준다.
 @SpringBootApplication
 public class FeignTestApplication {
-
-		public static void main(String[] args) {
-				SpringApplication.run(FeignTestApplication.class, args);
-		}
+	public static void main(String[]~ args) {
+		SpringApplication.run(FeignTestApplication.class, args);
+	}
 }
 ```
 
@@ -47,7 +46,7 @@ public interface TestClient {
 - `url`: 요청의 base url
 - `qualifier` : beanName
 - `configuration`: 커스터마이징한 configuration을 넣을 수 있음
-- `fallback`: Histrix fallback 메서드 (정리 필요)
+fallback 관련 옵션은 아래에서 다룬다.
 
 ### 4. Service / Controller
 
@@ -94,16 +93,15 @@ MSA 테스트를 위해 서버가 2개여야하지만, 간단한 테스트를 �
 
 FeignClient는 기본적으로 제공하는 Configuration이 있기에 별도 설정 없이도 사용이 가능하다. 제공되는 Configuration은 FeignClientsConfiguration.class이다. 내부적으로 설정되어 있는 Bean들을 살펴보면 `@ConditionalOnMissingBean`이 붙어있다. 이는 해당 Bean은 해당 옵션으로 사용하는 별도 Bean이 없을 때 적용되는 Default라는 의미이다. 별도 Bean이 있다면 Override된다.
 
-**Decoder feignDecoder**
+#### 설정 관련 Bean (일부 정리)
 
+**`Decoder feignDecoder`**
 Feign호출 이후 http 응답에 대한 디코딩 처리 설정
 
-**Encoder feignEncoder**
-
+**`Encoder feignEncoder`**
 Feign호출에서 인코딩 처리 설정, 기본적으로 SpringEncoder로 인코딩한다.
 
-**Logger feignLogger**
-
+**`Logger feignLogger`**
 ```java
 @Autowired(required = false)
 private Logger logger;
@@ -119,7 +117,97 @@ public FeignLoggerFactory feignLoggerFactory() {
 
 실제 환경에서 Feign을 사용하기 위해서는 커스터마이징이 필수적이다. ex) full로그가 필요, Hystrix나 Retryer과 함께 제공되는 기능이 필요 등
 
+## Spring Cloud CircuitBreaker와의 통합
+
+Spring cloud openfeign은 circuit breaker에 대한 통합도 지원한다. 만약 Spring Cloud CircuitBreadker가 classpath에 존재하고, `spring.cloud.openfeign.circuitbreaker.enabled=true`인 경우 Feign은 모든 메서드를 circuit breaker로 wrapping한다. 각 Feign client 기반의 서킷 지원을 비활성화하려면 Feign.Builder를 prototype scope Bean으로 생성하면 된다.
+> 구버전의 경우 서킷 활성화를 위해 `feign.circuitbreaker.enabled=true` 설정을 사용해야 한다.
+
+이 때 생성된 서킷 브레이커의 네이밍 패턴은 `<feignClientName>_<calledMethod>` 형식이다.
+
+아래의 Resolver를 제공함으로써 네이밍 패턴을 변경할 수 있다.
+```java
+@Configuration
+public class FooConfiguration {
+    @Bean
+    public CircuitBreakerNameResolver circuitBreakerNameResolver() {
+        return (String feignClientName, Target<?> target, Method method) -> feignClientName + "_" + method.getName();
+    }
+}
+```
+
+### Configuration Properties를 활용한 CircuitBreaker 설정
+
+서킷은 아래와 같이 properties 파일을 이용해서 설정 가능하다.
+
+```yaml
+spring:
+  cloud:
+    openfeign:
+      circuitbreaker:
+        enabled: true
+        alphanumeric-ids:
+          enabled: true
+resilience4j:
+  circuitbreaker:
+    instances:
+      DemoClientgetDemo:
+        minimumNumberOfCalls: 69
+  timelimiter:
+    instances:
+      DemoClientgetDemo:
+        timeoutDuration: 10s
+```
+
+### Feign Spring cloud CircuitBreaker의 Fallbacks
+
+FeignClient와 Circuit Breaker를 통합하여 fallback 패턴을 사용할 수 있다. fallback은 다음과 같이 사용 가능하며 서킷이 열리는 경우 외부 서버에 대한 응답을 대체한다.
+
+기본적으로 아래와 같이 `fallbakck`을 사용해서 설정 가능하다.
+
+```java
+@FeignClient(name = "example-service", fallback = ExampleServiceFallback.class)
+public interface ExampleService {
+    @GetMapping("/someEndpoint")
+    String getSomeData();
+}
+
+public class ExampleServiceFallback implements ExampleService {
+    @Override
+    public String getSomeData() {
+        return "Fallback Data";
+    }
+}
+```
+
+만약 fallback을 트리거한 throwable에 접근하려면 다음과 같이 `fallbackFactory`를 사용할 수 있다. 더 구체적인 예외 원인을 파악하고 알맞은 처리를 하기 위해서는 factory를 사용하는 것이 권장된다.
+
+```java
+@FeignClient(name = "example-service", fallbackFactory = ExampleServiceFallbackFactory.class)
+public interface ExampleService {
+    @GetMapping("/someEndpoint")
+    String getSomeData();
+}
+
+@Component
+public class ExampleServiceFallbackFactory implements FallbackFactory<ExampleService> {
+    @Override
+    public ExampleService create(Throwable cause) {
+        return new ExampleService() {
+            @Override
+            public String getSomeData() {
+                if (cause instanceof FeignException) {
+                    // Customize the fallback logic based on the specific cause
+                    // For example, you can inspect the FeignException to determine the error.
+                }
+                return "Fallback Data";
+            }
+        };
+    }
+}
+```
 ---
 
 참고
 - https://sabarada.tistory.com/115?category=822738
+- https://resilience4j.readme.io/docs/feign
+- https://docs.spring.io/spring-cloud-openfeign/docs/current/reference/html/#spring-cloud-feign-circuitbreaker
