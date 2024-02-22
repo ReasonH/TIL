@@ -54,6 +54,7 @@
 - [Cassandra](Cassandra/cassandra.md)
 - [Cassandra TTL](Cassandra/cassandra-ttl.md)
 - [Cassandra Component](Cassandra/cassandra-component.md)
+- [LSM Tree](Cassandra/lsm-tree.md)
 
 #### Redis
 - [Cacheable](Redis/cacheable.md)
