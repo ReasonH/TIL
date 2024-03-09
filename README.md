@@ -54,10 +54,12 @@
 - [Cassandra](Cassandra/cassandra.md)
 - [Cassandra TTL](Cassandra/cassandra-ttl.md)
 - [Cassandra Component](Cassandra/cassandra-component.md)
+- [Cassandra Partition](Cassandra/cassandra-ideal-partition.md)
 - [LSM Tree](Cassandra/lsm-tree.md)
 
 #### Redis
 - [Cacheable](Redis/cacheable.md)
+- [Spring에서 대량의 Redis key 제거하기](Redis/cache-clear.md)
 - [Redis와 Transaction 결합, 그리고 TransactionTemplate](Redis/redisTemplate.md)
 - [redisson local cache](Redis/redisson-localcache.md)
 - [redissonRegionFactory는 왜 EVAL을 수없이 보낼까](Redis/redisson-2lv.md)

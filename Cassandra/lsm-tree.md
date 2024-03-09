@@ -79,7 +79,7 @@ SSTable은 파일 안의 값들이 key로 정렬되어있다. 어떻게 파일 �
 
 LSM Tree는 key-value 추가 시, SSTable에 바로 데이터를 넣는 대신 메모리에 있는 balanced binary tree에 데이터를 먼저 추가한다. 메모리 내의 이런 트리 구조를 Memtable이라 부른다.
 
-### 새로운 데이터 추가 방식
+### 데이터 추가
 
 Memtable이 일정 사이즈를 넘어가면 SSTable로 일괄 작성한다.
 
@@ -101,38 +101,63 @@ Log File은 단순히 유저가 데이터를 추가한 순서대로 임시 데�
 ![](img/lsm-tree-3.png)
 
 기존의 Hash Index와 유사한듯 하지만, Sparse Index는 SSTable의 시작, 끝 값에 대한 offset만 가지고 있다.즉 메모리에 모든 키를 저장하지 않아도 된다는 장점이 있다. (이는 SSTable 자체가 모두 정렬 상태로 저장되어 있기 때문이다.) 이를 통해 key가 있는 SSTable을 어느정도 특정할 수 있다는 장점이 있다.
+- Sparse Index 범위를 벗어난 Key에 대해 SSTable I/O를 아예 없앨 수 있다.
+- Sparse Index 범위에 속하는 경우는 항상 SSTable을 살펴봐야 한다. (I/O 발생)
 
-- Sparse Index를 사용하면 해당 Key가 존재하지 않는 SSTable은 명확하게 걸러낼 수 있다.
-- 그러나 key 존재 가능성이 있는 SSTable을 여러개 살펴봐야 할 수도 있다.
+###  Bloom Filter
 
-예시
+Sparse Index는 I/O를 줄이는 보조 장치는 될 수 있다. 그러나 존재하지 않는 key를 찾기 위해 많은 수의 SSTable 조회를 발생시킬 수 있다는 문제가 있다.
 
+##### 문제 사례 예시
 1. Memtable에서 key 2015에 대해 조회 ⇒ 없음
 2. Sparse Index 2를 확인 ⇒ start key가 2112이므로 SSTable 조회 ⇒ 없음
 3. Sparse Index 1을 확인 ⇒ start key가 1234, end key가 5678이므로 SSTable 조회 ⇒ 없음
+이런 경우 어디에도 존재하지 않는 key를 찾기 위해 2회의 Disk I/O가 발생했다.
+이를 개선하기 위해서는 Bloom Filter를 사용할 수 있다. 
 
-### 전체 구조
+**Bloom Filter는 존재하지 않는 key를 걸러내기 위해 사용할 수 있는 자료구조이다.** 
+Bit Array와 여러 개의 Hash 함수를 이용해 특정 데이터가 존재하는지를 확인하는데 사용한다.
+자세한 정리는 [잘 정리된 블로그](https://gngsn.tistory.com/201)가 많으니 참고하자.
+
+Bloom Filter의 특징은
+- 공간/시간의 절약, 대신 일부 에러를 허용
+- false positive 방식으로 키 존재 유무를 알려준다.
+	- 없다고 하면 -> 확실히 없음
+	- 있다고 하면 -> 있을 수도 없을 수도 있음
+
+이런 특징을 통해 key가 존재하지 않는 SSTable을 *상당히* 걸러낼 수 있다.
+
+## 전체 구조
 
 Memory
 
 1. Memtable
-2. Indexes (Sparse Index)
+2. Sparse(Summary) Index
+3. Bloom Filter
 
 Disk
 
 1. SSTable
 
-이 때 SSTable은 크기별로 여러 단계가 있다. 작은 SSTable Compaction을 통해 다음 레벨의 SSTable로 만들어지는 구조이다. 각 SSTable은 정렬 상태이기 때문에 Compaction 시에는, merge sort를 통해 비교적 빠르게 병합이 가능하다.
+![](img/lsm-tree-4.png)
+위는 최종적으로 구성된 보편적인 LSM Tree의 모습이다.
+
+1. 사용자가 등록한 데이터는 Memtable에 쓰이며 여기서는 데이터를 이진 트리 구조로 정렬한다.
+2. Memtable이 가득 차면 SSTable로 flush되며 이 때 Summary table(Index)가 생성된다.
+	- 각 Memtable은 정렬 상태이기 때문에 SSTable flush 시 쓰기 속도가 최적화된다.
+3. 위 과정이 반복되며 SSTable이 점점 늘어나면 공간 확보를 위한 Compaction이 수행된다. 작은 SSTable들은 Compaction을 통해 다음 Level의 SSTable로 만들어진다.
+	- 각 SSTable은 정렬상태이기 때문에 merge sort 동작방식으로 빠른 병합을 보장한다.
+4. 각 Level 별로 bloom filter가 만들어진다. 이는 존재하지 않는 key 검색 부하 등을 낮추는데 사용된다.
 
 ### 더 알아보면 좋을 내용
 
-1. Sparse Index만을 이용하는 경우, 존재하지 않는 키를 조회할 때 모든 SSTable을 조회해야 한다는 문제가 있다. 이 부분을 해결하기 위해 Bloom Filter를 사용한다는데, 좀 더 알아봐야겠다.
-2. Compaction 이후에는 조회가 어떻게 이루어지는지 궁금하다.
-3. 각 SSTable이 정렬되어 있더라도 Range 조회에서 이를 어떻게 활용하지?
+1. 각 SSTable이 정렬되어 있더라도 Range 조회에서 이를 어떻게 활용하지?
 
 ---
 참고
 
 - [https://jaeyeong951.medium.com/색인-index-의-두-가지-형태-lsm-트리-b-트리-7a4ab7887db5](https://jaeyeong951.medium.com/%EC%83%89%EC%9D%B8-index-%EC%9D%98-%EB%91%90-%EA%B0%80%EC%A7%80-%ED%98%95%ED%83%9C-lsm-%ED%8A%B8%EB%A6%AC-b-%ED%8A%B8%EB%A6%AC-7a4ab7887db5)
+- https://www.youtube.com/watch?v=I6jB0nM9SKU&t=388s
 - [https://www.youtube.com/watch?v=i_vmkaR1x-I&t=322s](https://www.youtube.com/watch?v=i_vmkaR1x-I&t=322s)
 - [https://www.datastax.com/blog/leveled-compaction-apache-cassandra](https://www.datastax.com/blog/leveled-compaction-apache-cassandra)
+- https://gngsn.tistory.com/201
