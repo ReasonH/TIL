@@ -83,6 +83,7 @@
 - [SecurityContext 이슈](Experience/securitycontext.md)
 - [hikariCP 고갈 이슈](Experience/hikariCP-starvation.md)
 - [@Transactional과 @Retry 사용시 주의점](Experience/transaction-retry.md)
+- [Request 400에 대한 원인 찾기](Experience/strict-firewall.md)
 
 ### Book
 1. [Refactoring](Refactoring/README.md)
