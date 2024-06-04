@@ -31,7 +31,6 @@ Content-Type: application/json
 test-header: 1$...중략...;:ëì¹;...이하 생략 // 헤더는 가칭으로 대체
 ...중략
 content-length: 0
-
 ```
 
 눈에 들어온 것은 깨진 문자열이 포함된 헤더였다. `test-header`은 게이트웨이에서 생성되는 헤더였다.

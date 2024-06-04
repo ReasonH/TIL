@@ -21,3 +21,5 @@
 11. [번외, 값 타입](jpa-11.md)
 
 12. [JPA Lock](jpa-12.md)
+
+13. [쿼리 메소드와 JOIN](method-query.md)

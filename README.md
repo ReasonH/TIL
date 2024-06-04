@@ -49,6 +49,7 @@
 - [mySQL 팁](MySQL/mySQL.md)
 - [mySQL의 쿼리분석](MySQL/explain.md)
 - [인덱스에 관한 각종 정리](MySQL/index.md)
+- [Lock](MySQL/lock.md)
 
 #### Cassandra
 - [Cassandra](Cassandra/cassandra.md)
