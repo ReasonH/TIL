@@ -5,7 +5,7 @@
 - [Spring Security](Spring/spring-security.md)
 - [Spring Cloud Stream](Spring/spring-cloud-stream.md)
 - [Spring Cloud OpenFeign](Spring/spring-cloud-openFeign.md)
-- [Spring CloudCircuitBreaker](Spring/spring-cloud-circuitbreaker.md)
+- [Spring Cloud CircuitBreaker](Spring/spring-cloud-circuitbreaker.md)
 - [Spring Cache](Spring/spring-cache.md)
 - [Spring Batch 팁 (JpaPagingItemReader)](Spring/spring-batch-tip.md)
 - [JDK와 CGLIB](Spring/jdk-cglib.md)
@@ -69,6 +69,7 @@
 #### Docker / K8s
 - [Docker](Docker/Docker-Concept.md)
 - [Kubernetes](Kubernetes/README.md)
+- [k8s QoS](Kubernetes/qos.md)
 
 #### Protocol
 - [Websocket](Protocol/websocket.md)
