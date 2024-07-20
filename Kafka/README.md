@@ -1,16 +1,14 @@
 ## Kafka
 
-사이드 프로젝트에 Kafka 도입을 위한 공부, 곧바로 응용할 예정이라 여기에서는 간단한 개념만 잡고 가도록 한다.
-
+실무에서 사용하지 않았지만, 알아두면 좋을 것 같아 공부
 ### 개념 정리
 
-[1. 소개](01-concept.md)
+[1. 카프카 구성요소](detail-01-kafka-cluster.md)
 
-[2. 프로듀서](02-producer.md)
+[2 카프카 cli](detail-02-kafka-cli.md)
 
-[3. 컨슈머](03-consumer.md)
+[3 프로듀서](detail-03-producer.md)
 
----
+[4. 컨슈머](detail-04-consumer.md)
 
-참조
-[Kafka 조금 아는 척 하기 1~3편](https://www.youtube.com/watch?v=0Ssx7jJJADI&t=154s)
+[5. 일반적인 이슈들](detail-05-kafka-issue.md)

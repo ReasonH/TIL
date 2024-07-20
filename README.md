@@ -78,7 +78,7 @@
 #### ETC
 - [Message Queue vs Pub/Sub 차이점](ETC/mq-pub-sub.md)
 - [Maven](ETC/maven.md)
-- [Kafka 간단 개념 정리](Kafka/README.md)
+- [Kafka](Kafka/README.md)
 
 #### Issue & Experience
 - [캐시 전환 작업 회고](Experience/hz-to-redis.md)
