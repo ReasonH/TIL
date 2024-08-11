@@ -11,12 +11,6 @@
 - [JDK와 CGLIB](Spring/jdk-cglib.md)
 - [각종 Spring Annotation](Spring/annotaton.md)
 
-### Test
-- [테스트 DateTime 고정](Spring/test-datetime.md)
-- [MockMvc StanaloneSetup vs webAppContextSetup](Spring/mockmvc.md)
-- [테스트 문서화에서 발생한 PayloadHandlingException 처리](Spring/rest-docs-PayloadHandlingException.md)
-- [테스트 메서드에서 @Transactional 사용 시 주의점](Spring/test-transactional.md)
-
 ### JPA, Hibernate
 - [JPA](JPA/README.md)
 - [트랜잭션 내에서의 각종 동작 정리](JPA/transactional-test.md)
@@ -34,7 +28,7 @@
 - [병렬 스트림](Java/parallelStream.md)
 - [Virtual Thread](Java/virtual-thread.md)
 
-#### Kotlin
+### Kotlin
 - [코틀린 기본1](Kotlin/kotlin-basic-01.md)
 - [코틀린 기본2](Kotlin/kotlin-basic-02.md)
 - [코틀린 기본3](Kotlin/kotlin-basic-03.md)
@@ -45,20 +39,20 @@
 - [각종 키워드](Kotlin/keyword.md)
 - [코틀린과 JPA Entity](Kotlin/kotlin-jpa)
 
-#### MySQL
+### MySQL
 - [mySQL 팁](MySQL/mySQL.md)
 - [mySQL의 쿼리분석](MySQL/explain.md)
 - [인덱스에 관한 각종 정리](MySQL/index.md)
 - [Lock](MySQL/lock.md)
 
-#### Cassandra
+### Cassandra
 - [Cassandra](Cassandra/cassandra.md)
 - [Cassandra TTL](Cassandra/cassandra-ttl.md)
 - [Cassandra Component](Cassandra/cassandra-component.md)
 - [Cassandra Partition](Cassandra/cassandra-ideal-partition.md)
 - [LSM Tree](Cassandra/lsm-tree.md)
 
-#### Redis
+### Redis
 - [Cacheable](Redis/cacheable.md)
 - [Spring에서 대량의 Redis key 제거하기](Redis/cache-clear.md)
 - [Redis와 Transaction 결합, 그리고 TransactionTemplate](Redis/redisTemplate.md)
@@ -66,26 +60,34 @@
 - [redissonRegionFactory는 왜 EVAL을 수없이 보낼까](Redis/redisson-2lv.md)
 - [레디스 팁](Redis/redis-tip.md)
 
-#### Docker / K8s
+### Docker / K8s
 - [Docker](Docker/Docker-Concept.md)
 - [Kubernetes](Kubernetes/README.md)
 - [k8s QoS](Kubernetes/qos.md)
 
-#### Protocol
+### Protocol
 - [Websocket](Protocol/websocket.md)
 - [gRPC](Protocol/gRPC.md)
 
-#### ETC
+### ETC
 - [Message Queue vs Pub/Sub 차이점](ETC/mq-pub-sub.md)
 - [Maven](ETC/maven.md)
 - [Kafka](Kafka/README.md)
 
-#### Issue & Experience
+### Issue & Experience
 - [캐시 전환 작업 회고](Experience/hz-to-redis.md)
 - [SecurityContext 이슈](Experience/securitycontext.md)
 - [hikariCP 고갈 이슈](Experience/hikariCP-starvation.md)
 - [@Transactional과 @Retry 사용시 주의점](Experience/transaction-retry.md)
 - [Request 400에 대한 원인 찾기](Experience/strict-firewall.md)
+- [쿼리 메소드와 JOIN](Experience/method-query.md)
+- [데드락 발생과 JPA의 ActionQueue](Experience/deadlock.md)
+
+### Test
+- [테스트 DateTime 고정](Spring/test-datetime.md)
+- [MockMvc StanaloneSetup vs webAppContextSetup](Spring/mockmvc.md)
+- [테스트 문서화에서 발생한 PayloadHandlingException 처리](Spring/rest-docs-PayloadHandlingException.md)
+- [테스트 메서드에서 @Transactional 사용 시 주의점](Spring/test-transactional.md)
 
 ### Book
 1. [Refactoring](Refactoring/README.md)
