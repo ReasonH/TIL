@@ -82,6 +82,7 @@
 - [Request 400에 대한 원인 찾기](Experience/strict-firewall.md)
 - [쿼리 메소드와 JOIN](Experience/method-query.md)
 - [데드락 발생과 JPA의 ActionQueue](Experience/deadlock.md)
+- [Spring 2.7 에서 3.3으로의 migration](Experience/migration.md)
 
 ### Test
 - [테스트 DateTime 고정](Spring/test-datetime.md)
